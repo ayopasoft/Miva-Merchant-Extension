@@ -1,0 +1,67 @@
+<MvCOMMENT>
+|
+| MIVA Merchant v5.x
+|
+| This file and the source codes contained herein are the property
+| of MIVA Small Business Solutions, Inc.  Use of this file is restricted to the specific
+| terms and conditions in the License Agreement associated with this
+| file.  Distribution of this file or portions of this file for uses
+| not covered by the License Agreement is not allowed without a written
+| agreement signed by an officer of MIVA Small Business Solutions, Inc.
+|
+| Copyright 1998-2005 MIVA Small Business Solutions, Inc.  All rights reserved.
+| http://smallbusiness.miva.com/
+|
+| $Id: 
+|
+| Prefix         : MER-SYS-EXP-
+| Next Error Code: 
+0    
+0    
+|
+</MvCOMMENT>
+
+<MvFUNCTION NAME = "Module_Description" PARAMETERS = "module var" STANDARDOUTPUTLEVEL = "">
+	<MvASSIGN NAME = "l.module:code"		VALUE = "ay-ex-ayopa-system">
+	<MvASSIGN NAME = "l.module:name"		VALUE = "Ayopa Checkout System Extension">
+	<MvASSIGN NAME = "l.module:provider"	VALUE = "Ayopa">
+	<MvASSIGN NAME = "l.module:version"		VALUE = "5.6000">
+	<MvASSIGN NAME = "l.module:api_ver"		VALUE = "5.60">
+	<MvASSIGN NAME = "l.module:features"	VALUE = "system">
+</MvFUNCTION>
+
+
+<MvFUNCTION NAME = "SystemModule_Screen" PARAMETERS = "module var, screen" STANDARDOUTPUTLEVEL = "">
+
+	<MvFUNCTIONRETURN VALUE = "1">
+</MvFUNCTION>
+
+<MvFUNCTION NAME = "SystemModule_Action" PARAMETERS = "module var, action" STANDARDOUTPUTLEVEL = "">
+	<MvIF EXPR = "{ l.action EQ 'AUTH' }">
+	
+		<MvIF EXPR = "{ ISNULL g.fb_id }">
+			<MvASSIGN NAME = "g.Ayopa_Auctions" VALUE = "">
+			<MvASSIGN NAME = "l.return" VALUE = "{AyopaOption_Delete(g.basket:basket_id,'Ayopa')}">
+		</MvIF>
+	
+	</MvIF>
+	<MvFUNCTIONRETURN VALUE = "1">
+</MvFUNCTION>
+
+<MvFUNCTION NAME = "AyopaOption_Delete" PARAMETERS = "id, code" STANDARDOUTPUTLEVEL = "">
+	<MvQUERY NAME	= "Merchant"
+			 QUERY	= "{ 'DELETE FROM ' $ g.Store_Table_Prefix $ 'BasketOptions
+						  WHERE
+							basket_id	= ? and attr_code = ?' }"
+			 FIELDS	= "l.id, l.code">
+	<MvIF EXPR = "{ g.MvQUERY_Error }">
+		<MvFUNCTIONRETURN VALUE = "{ [ g.Module_Library_Utilities ].Error( 'MER-UTL-CST-00074', g.MvQUERY_Error ) }">
+	</MvIF>
+
+	<MvFUNCTIONRETURN VALUE = 1>
+</MvFUNCTION>
+
+<MvFUNCTION NAME = "SystemModule_UIException" PARAMETERS = "module var, exception" STANDARDOUTPUTLEVEL = "">
+
+	<MvFUNCTIONRETURN VALUE = "1">
+</MvFUNCTION>

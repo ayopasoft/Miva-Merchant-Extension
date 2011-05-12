@@ -1,0 +1,122 @@
+<MIVA STANDARDOUTPUTLEVEL = "" IDENT = "$Id: ay-ex-log.mv 23979 2010-05-04 18:00:13Z burch $">
+
+<MvCOMMENT>
+|
+| Miva Merchant v5.x
+|
+| This file and the source codes contained herein are the property of
+| MSB Acquisition, Inc. d/b/a Miva Merchant.  Use of this file is restricted
+| to the specific terms and conditions in the License Agreement associated
+| with this file.  Distribution of this file or portions of this file for
+| uses not covered by the License Agreement is not allowed without a
+| written agreement signed by an officer of MSB Acquisition, Inc. d/b/a Miva Merchant.
+|
+| Copyright 1998-2009 MSB Acquisition, Inc. d/b/a Miva Merchant  All rights reserved.
+| http://www.mivamerchant.com
+|
+| Prefix         : MER-LOG-ELF-
+| Next Error Code: 11   
+|
+</MvCOMMENT>
+
+<MvFUNCTION NAME = "Module_Description" PARAMETERS = "module var" STANDARDOUTPUTLEVEL = "">
+	<MvASSIGN NAME = "l.module:code"		VALUE = "ay-ex-log">
+	<MvASSIGN NAME = "l.module:name"		VALUE = "Ayopa Log Extension">
+	<MvASSIGN NAME = "l.module:provider"	VALUE = "Ayopa">
+	<MvASSIGN NAME = "l.module:version"		VALUE = "5.6000">
+	<MvASSIGN NAME = "l.module:api_ver"		VALUE = "5.00">
+	<MvASSIGN NAME = "l.module:features"	VALUE = "log">
+</MvFUNCTION>
+
+
+<MvFUNCTION NAME = "LogModule_Action" PARAMETERS = "module var, action" STANDARDOUTPUTLEVEL = "">
+	<MvIF EXPR = "{ l.action EQ 'AUTH' }">
+	
+		<MvASSIGN NAME = "l.aym:ayopa_id"	VALUE = "{ g.fb_id }">
+		<MvASSIGN NAME = "l.aym:bill_addr1" VALUE = "{g.Ayopa_Buyer:BILL_ADDR1}">
+		<MvASSIGN NAME = "l.aym:bill_addr2" VALUE = "{g.Ayopa_Buyer:BILL_ADDR2}">
+		<MvASSIGN NAME = "l.aym:bill_city" VALUE = "{g.Ayopa_Buyer:BILL_CITY}">
+		<MvASSIGN NAME = "l.aym:bill_cntry" VALUE = "{g.Ayopa_Buyer:BILL_CNTRY}">
+		<MvASSIGN NAME = "l.aym:bill_state" VALUE = "{g.Ayopa_Buyer:BILL_STATE}">
+		<MvASSIGN NAME = "l.aym:bill_zip" VALUE = "{g.Ayopa_Buyer:BILL_ZIP}">
+		<MvASSIGN NAME = "l.aym:bill_fname" VALUE = "{g.Ayopa_Buyer:BILL_FNAME}">
+	   	<MvASSIGN NAME = "l.aym:bill_lname" VALUE = "{g.Ayopa_Buyer:BILL_LNAME}">
+
+		<MvASSIGN NAME = "l.item_pos"		VALUE = 1>
+		<MvASSIGN NAME = "l.item_count"		VALUE = "{ miva_array_elements( g.Ayopa_Auctions) }">
+
+		<MvWHILE EXPR = "{ l.item_pos LE l.item_count }">
+				
+					<MvASSIGN NAME = "l.aym:sent"		VALUE = "0">
+					<MvASSIGN NAME = "l.aym:verified"		VALUE = "0">
+					<MvASSIGN NAME = "l.aym:auction_id"		VALUE = "0">
+					<MvASSIGN NAME = "l.aym:price"		VALUE = "0">
+					<MvASSIGN NAME = "g.Ayopa" VALUE = "1">
+
+					<MvASSIGN NAME = "l.aym:auction_id" VALUE = "{g.Ayopa_Auctions[l.item_pos]:value}">
+					<MvASSIGN NAME = "l.aym:quantity" VALUE = "{g.Ayopa_Auctions[l.item_pos]:quantity}">
+					<MvASSIGN NAME = "l.aym:price" VALUE = "{g.Ayopa_Auctions[l.item_pos]:price}">
+					
+					<MvASSIGN NAME = "{l.result}" VALUE = "{ AYM_Insert( l.aym ) }">
+					
+			<MvASSIGN NAME = "l.item_pos"	VALUE = "{ l.item_pos + 1 }">
+		</MvWHILE>
+
+			<MvFUNCTIONRETURN VALUE = 1>
+	</MvIF>
+
+	<MvFUNCTIONRETURN VALUE = 1>
+</MvFUNCTION>
+
+<MvFUNCTION NAME = "LogModule_Screen" PARAMETERS = "module var, screen" STANDARDOUTPUTLEVEL = "">
+	
+	<MvFUNCTIONRETURN VALUE = 1>
+</MvFUNCTION>
+
+<MvFUNCTION NAME = "LogModule_UIException" PARAMETERS = "module var, code" STANDARDOUTPUTLEVEL = "">
+	<MvFUNCTIONRETURN VALUE = 1>
+</MvFUNCTION>
+
+<MvFUNCTION NAME = "AYM_Insert" PARAMETERS = "aym var" STANDARDOUTPUTLEVEL = "">
+	<MvCOMMENT>
+		Server call: http://ayopa1dev.happyjacksoftware.com:8080/AyopaServer/miva/set-auction-participation?auction_id=&fb_id=&quantity=
+		
+		http://www.ayopadev.com/ayopa/auction.php?auction_id=
+	</MvCOMMENT>
+	<MvASSIGN NAME="l.url" VALUE="{ 'http://beta.ayopasoft.com/AyopaServer/miva/set-auction-participation' }">
+	<MvASSIGN NAME="l.return" VALUE="0">
+	
+	<MvASSIGN NAME="auctionID" VALUE="{l.aym:auction_id}">
+	<MvASSIGN NAME="buyerID" VALUE="{l.aym:ayopa_id}">
+	<MvASSIGN NAME="quantity" VALUE="{l.aym:quantity}">
+	<MvASSIGN NAME="price" VALUE="{l.aym:price}">
+	<MvASSIGN NAME="address1" VALUE="{l.aym:bill_addr1}">
+	<MvASSIGN NAME="address2" VALUE="{l.aym:bill_addr2}">
+	<MvASSIGN NAME="city" VALUE="{l.aym:bill_city}">
+	<MvASSIGN NAME="state" VALUE="{l.aym:bill_state}">
+	<MvASSIGN NAME="zip" VALUE="{l.aym:bill_zip}">
+	<MvASSIGN NAME="country" VALUE="{l.aym:bill_cntry}">
+	
+	<MvCALL ACTION="{ l.url }"  METHOD="POST" FIELDS="auctionID,buyerID,quantity,price,address1,address2,city,state,zip,country" >
+	
+		<MvIF EXPR="{ s.callobjecttype EQ 'tag' }">
+			<MvCALLCONTINUE>
+		</MvIF>
+		
+		<MvASSIGN NAME="l.return" VALUE="{ s.callvalue }">
+	</MvCALL>
+	
+	<MvQUERY NAME	= "Merchant"
+			 QUERY	= "{ 'INSERT INTO ' $ g.Store_Table_Prefix $ 'AYM_Auctions
+						  ( auction_id, ayopa_id, quantity, price, sent, verified )
+						  VALUES
+						  ( ?, ?, ?, ?, ?, ? )' }"
+			 FIELDS	= "l.aym:auction_id, l.aym:ayopa_id, l.aym:quantity, l.aym:price, l.aym:sent, l.return">
+	<MvIF EXPR = "{ g.MvQUERY_Error }">
+		<MvFUNCTIONRETURN VALUE = "{ [ g.Module_Library_Utilities ].Error( 'MER-LOG-ELF-00007', g.MvQUERY_Error ) }">
+	</MvIF>
+
+	
+	<MvFUNCTIONRETURN VALUE = 1>
+</MvFUNCTION>
+

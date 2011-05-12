@@ -1,0 +1,120 @@
+<MvCOMMENT>
+|
+| Miva Merchant v5.x
+|
+| This file and the source codes contained herein are the property of
+| MSB Acquisition, Inc. d/b/a Miva Merchant.  Use of this file is restricted
+| to the specific terms and conditions in the License Agreement associated
+| with this file.  Distribution of this file or portions of this file for
+| uses not covered by the License Agreement is not allowed without a
+| written agreement signed by an officer of MSB Acquisition, Inc. d/b/a Miva Merchant.
+|
+| Copyright 1998-2009 MSB Acquisition, Inc. d/b/a Miva Merchant  All rights reserved.
+| http://www.mivamerchant.com
+|
+| Prefix         : EX-HELLO1-
+| Next Error Code: 1    
+|
+</MvCOMMENT>
+
+<MvFUNCTION NAME = "Module_Description" PARAMETERS = "module var" STANDARDOUTPUTLEVEL = "">
+	<MvASSIGN NAME = "l.module:code"		VALUE = "ay-cmp-productdisplay">
+	<MvASSIGN NAME = "l.module:name"		VALUE = "Ayopa Product Display Component">
+	<MvASSIGN NAME = "l.module:provider"		VALUE = "Ayopa">
+	<MvASSIGN NAME = "l.module:version"		VALUE = "5.5000">
+	<MvASSIGN NAME = "l.module:api_ver"		VALUE = "5.00">
+	<MvASSIGN NAME = "l.module:features"	VALUE = "component">
+</MvFUNCTION>
+
+<MvFUNCTION NAME = "ComponentModule_Tabs" PARAMETERS = "module var, item, settings var" STANDARDOUTPUTLEVEL = "">
+	<MvFUNCTIONRETURN VALUE = "">
+</MvFUNCTION>
+
+<MvFUNCTION NAME = "ComponentModule_Validate" PARAMETERS = "module var, item, field_prefix, fields var" STANDARDOUTPUTLEVEL = "">
+	<MvFUNCTIONRETURN VALUE = 1>
+</MvFUNCTION>
+
+<MvFUNCTION NAME = "ComponentModule_Update" PARAMETERS = "module var, item, field_prefix, fields var, settings var" STANDARDOUTPUTLEVEL = "">
+	<MvFUNCTIONRETURN VALUE = 1>
+</MvFUNCTION>
+
+<MvFUNCTION NAME = "ComponentModule_Content" PARAMETERS = "module var, item, tab, load_fields, field_prefix, fields var, settings var" STANDARDOUTPUTLEVEL = "">
+</MvFUNCTION>
+
+<MvFUNCTION NAME = "ComponentModule_Defaults" PARAMETERS = "module var, settings var" STANDARDOUTPUTLEVEL = "">
+</MvFUNCTION>
+
+<MvFUNCTION NAME = "ComponentModule_Page_Assign" PARAMETERS = "module var, page var, item, settings var" STANDARDOUTPUTLEVEL = "">
+	<MvFUNCTIONRETURN VALUE = 1>
+</MvFUNCTION>
+
+<MvFUNCTION NAME = "ComponentModule_Page_Unassign" PARAMETERS = "module var, page var, item, settings var" STANDARDOUTPUTLEVEL = "">
+	<MvFUNCTIONRETURN VALUE = 1>
+</MvFUNCTION>
+
+<MvFUNCTION NAME = "ComponentModule_Initialize" PARAMETERS = "module var, item, all_settings var, settings var" STANDARDOUTPUTLEVEL = "">
+	
+	<MvFUNCTIONRETURN VALUE = 1>
+</MvFUNCTION>
+
+<MvFUNCTION NAME = "ComponentModule_Render_Start" PARAMETERS = "module var, item, all_settings var, settings var, param" STANDARDOUTPUTLEVEL = "text, html, compresswhitespace">
+	
+	
+	
+	<MvIF EXPR="{l.all_settings:CURRENT_AUCTION NE 0}">
+	
+		<script type="text/javascript" src="http://ayopa-resources.s3.amazonaws.com/js/jquery-1.3.2.min.js"></script>
+		<script type="text/javascript" src="http://ayopa-resources.s3.amazonaws.com/js/jquery.qtip-1.0.0-rc3.min.js"></script>
+		<script>
+		$(document).ready(function(){
+			$('#ayopa_btn').qtip({
+		   		content: {url:'/hover.html', title: {text:'The More Buyers Join, The Bigger Your Rebate',button: 'Close'}},
+		   		show: { when: 'mouseover' },
+		   		hide: 'unfocus',
+		   		style: { tip: true, name: 'light', width: {min:'500', max: '600'} },
+				position: {
+	      				corner: {
+	         			target: 'leftMiddle',
+	         			tooltip: 'rightMiddle'}
+	   			}
+
+			});
+		});
+		</script>
+
+		<script>
+		   function bwa()
+		   {
+			
+			<MvFOREACH ITERATOR = "l.attribute" ARRAY = "l.all_settings:attributes" INDEX = "l.pos">
+				<MvIF EXPR="{l.attribute:code EQ 'Ayopa'}">
+					<MvEVAL EXPR="{'var index = ' $ l.attribute:index}" />
+				</MvIF>
+			</MvFOREACH>
+			
+				
+				<MvEVAL EXPR="{'var auction_id = "' $ l.all_settings:CURRENT_AUCTION $ '"'}" />
+		       document.getElementById('ayopa').innerHTML = '<input type="hidden" name="Product_Attributes[' + index + ']:value" value="' + auction_id + '"><input type="hidden" name="ayopa_index" value="' + name + '">';
+
+			document.forms[1].submit();
+		   }
+
+		</script>
+
+
+			<div class="purchase-buttons"><input type="image" id="ayopa_btn" src="http://ayopa-resources.s3.amazonaws.com/images/buy_and_save.png" value="Buy with Ayopa" onClick="bwa();" /><br />
+		<MvEVAL EXPR="{'<iframe src="http://beta.ayopasoft.com/AyopaServer/display-auction-button?auctionID=' $ l.all_settings:CURRENT_AUCTION $ '" frameborder="0" width="250px" height="120px" scrolling="no"></iframe>'}" /> 
+		<div id="ayopa"></div>
+
+		</div>
+
+
+
+		<div class="clear"></div>
+	</MvIF>
+
+</MvFUNCTION>
+
+<MvFUNCTION NAME = "ComponentModule_Render_End" PARAMETERS = "module var, item, all_settings var, settings var, param" STANDARDOUTPUTLEVEL = "">
+
+</MvFUNCTION>
