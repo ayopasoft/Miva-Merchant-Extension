@@ -61,7 +61,9 @@
 					
 			<MvASSIGN NAME = "l.item_pos"	VALUE = "{ l.item_pos + 1 }">
 		</MvWHILE>
-
+			
+		<MvASSIGN NAME = "{l.resend}" VALUE = "{ AYM_Resend() }">
+			
 			<MvFUNCTIONRETURN VALUE = 1>
 	</MvIF>
 
@@ -86,6 +88,8 @@
 	<MvASSIGN NAME="l.url" VALUE="{ 'http://beta.ayopasoft.com/AyopaServer/miva/set-auction-participation' }">
 	<MvASSIGN NAME="l.return" VALUE="0">
 	
+	<MvASSIGN NAME="l.storekey" VALUE="{ makesessionid() }">
+	
 	<MvASSIGN NAME="auctionID" VALUE="{l.aym:auction_id}">
 	<MvASSIGN NAME="buyerID" VALUE="{l.aym:ayopa_id}">
 	<MvASSIGN NAME="quantity" VALUE="{l.aym:quantity}">
@@ -108,15 +112,67 @@
 	
 	<MvQUERY NAME	= "Merchant"
 			 QUERY	= "{ 'INSERT INTO ' $ g.Store_Table_Prefix $ 'AYM_Auctions
-						  ( auction_id, ayopa_id, quantity, price, sent, verified )
+						  ( id, auction_id, ayopa_id, quantity, price, sent, verified )
 						  VALUES
-						  ( ?, ?, ?, ?, ?, ? )' }"
-			 FIELDS	= "l.aym:auction_id, l.aym:ayopa_id, l.aym:quantity, l.aym:price, l.aym:sent, l.return">
+						  (?, ?, ?, ?, ?, ?, ? )' }"
+			 FIELDS	= "l.storekey, l.aym:auction_id, l.aym:ayopa_id, l.aym:quantity, l.aym:price, l.aym:sent, l.return">
 	<MvIF EXPR = "{ g.MvQUERY_Error }">
 		<MvFUNCTIONRETURN VALUE = "{ [ g.Module_Library_Utilities ].Error( 'MER-LOG-ELF-00007', g.MvQUERY_Error ) }">
 	</MvIF>
 
 	
 	<MvFUNCTIONRETURN VALUE = 1>
+</MvFUNCTION>
+
+
+<MvFUNCTION NAME = "AYM_Resend" PARAMETERS = "" STANDARDOUTPUTLEVEL = "">
+
+<MvASSIGN NAME="l.verified" VALUE = "0">
+
+<MvOPENVIEW NAME	= "Merchant"
+			VIEW	= "AyopaFields"
+			QUERY	= "{ 'SELECT id, auction_id, ayopa_id, price as ayopa_price, quantity as ayopa_quantity FROM ' $ g.Store_Table_Prefix $ 'AYM_Auctions WHERE verified = ?' }"
+			FIELDS	= "l.verified" >
+<MvIF EXPR = "{ g.MvOPENVIEW_Error }">
+	<MvFUNCTIONRETURN VALUE = "{ [ g.Module_Library_Utilities ].Error( 'MER-UTL-CST-00069', g.MvOPENVIEW_Error ) }">
+</MvIF>
+
+<MvASSIGN NAME="l.url" VALUE="{ 'http://beta.ayopasoft.com/AyopaServer/miva/set-auction-participation' }">
+
+<MvWHILE EXPR = "{ NOT AyopaFields.d.EOF }">
+	
+	<MvASSIGN NAME="l.return" VALUE="0">
+	
+	<MvASSIGN NAME="l.id" VALUE="{AyopaFields.d.id}">
+	<MvASSIGN NAME="auctionID" VALUE="{AyopaFields.d.auction_id}">
+	<MvASSIGN NAME="buyerID" VALUE="{AyopaFields.d.ayopa_id}">
+	<MvASSIGN NAME="price" VALUE="{AyopaFields.d.ayopa_price}">
+	<MvASSIGN NAME="quantity" VALUE="{AyopaFields.d.ayopa_quantity}">
+		
+	<MvCALL ACTION="{ l.url }"  METHOD="POST" FIELDS="auctionID,buyerID,quantity,price" >
+	
+		<MvIF EXPR="{ s.callobjecttype EQ 'tag' }">
+			<MvCALLCONTINUE>
+		</MvIF>
+		
+		<MvASSIGN NAME="l.return" VALUE="{ s.callvalue }">
+	</MvCALL>
+	
+	<MvQUERY NAME	= "Merchant"
+			 QUERY	= "{ 'UPDATE ' $ g.Store_Table_Prefix $ 'AYM_Auctions
+						  SET
+							verified = ?
+						  WHERE
+							id		= ?' }"
+			 FIELDS	= "l.return, l.id">
+	<MvIF EXPR = "{ g.MvQUERY_Error }">
+		<MvFUNCTIONRETURN VALUE = "{ [ g.Module_Library_Utilities ].Error( 'MER-LOG-ELF-00007', g.MvQUERY_Error ) }">
+	</MvIF>
+	
+	<MvSKIP NAME = "Merchant" VIEW = "AyopaFields" ROWS = 1>
+</MvWHILE>
+
+<MvCLOSEVIEW NAME = "Merchant" VIEW = "AyopaFields">
+
 </MvFUNCTION>
 

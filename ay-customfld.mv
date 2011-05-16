@@ -165,6 +165,7 @@
 	<MvQUERY NAME	= "Merchant"
 			 QUERY	= "{ 'CREATE TABLE ' $  g.Store_Table_Prefix $ 'AYM_Auctions
 						  (
+							id          ' $ [ g.Module_Library_Native_DBAPI ].DB_Type_CHAR( 100 ) $ ',
 							auction_id	' $ [ g.Module_Library_Native_DBAPI ].DB_Type_CHAR( 100 ) $ ',
 							ayopa_id	' $ [ g.Module_Library_Native_DBAPI ].DB_Type_CHAR( 100 ) $ ',
 							quantity	' $ [ g.Module_Library_Native_DBAPI ].DB_Type_NUMBER( 0, 0 ) $ ',
@@ -204,12 +205,14 @@
 </MvFUNCTION>
 
 <MvFUNCTION NAME = "Module_Uninstall_Store" PARAMETERS = "module var" STANDARDOUTPUTLEVEL = "" ERROROUTPUTLEVEL = "">
+	<MvCOMMENT>
 	<MvASSIGN NAME = "l.null" VALUE = "{ [ g.Module_Library_DB ].StoreKey_Delete( 'AYM_Fields' ) }">
 
 	<MvQUERY NAME = "Merchant" QUERY = "{ 'DROP TABLE ' $  g.Store_Table_Prefix $ 'AYM_ProdFields' }">
 	<MvQUERY NAME = "Merchant" QUERY = "{ 'DROP TABLE ' $  g.Store_Table_Prefix $ 'AYM_ProdValues' }">
 	<MvQUERY NAME = "Merchant" QUERY = "{ 'DROP TABLE ' $  g.Store_Table_Prefix $ 'AYM_Auctions' }">
 	<MvQUERY NAME = "Merchant" QUERY = "{ 'DROP TABLE ' $  g.Store_Table_Prefix $ 'AYM_Login' }">
+	</MvCOMMENT>
 	<MvFUNCTIONRETURN VALUE = 1>
 </MvFUNCTION>
 
