@@ -735,7 +735,7 @@
 			</table>
 		</div>
 	
-		<table border=0 cellpadding=0 cellspacing=5 width="100%">
+		<table border=0 cellpadding=0 cellspacing=5 width="50%">
 		<MvASSIGN NAME = "l.pos"			VALUE = 1>
 		<MvASSIGN NAME = "l.field_count"	VALUE = "{ miva_array_elements( g.AYM_Fields ) }">
 		
