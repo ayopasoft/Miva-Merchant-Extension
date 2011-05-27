@@ -850,9 +850,8 @@
 				<input type="hidden" size=25 name="AYM_Data[6]"   id = "product_image" value="{ encodeentities( g.Domain:BASE_URL $ l.product:thumbnail ) }"><img src="{ encodeentities(g.Domain:BASE_URL $ l.product:thumbnail) }" width="100px">
 			</td>
 		</tr>
+		</table>
 		
-		<tr>
-			<td colspan="2">
 				<div style="float:right;margin-right:30px;">
 					<input name="auction_submit" type="button" id="btn" name="btn" value="Save Auction">
 				</div>
@@ -861,9 +860,7 @@
 				</div>
 				<div id="response">
 				</div>	
-			</td>
-		</tr>
-		</table>
+		
 		</div> <!--end hide fields-->
 		<div id="create_auction">
 				<input name="auction_new" type="button" id="btn_new_auction" value="New Auction">
