@@ -63,8 +63,8 @@
 	
 	<MvIF EXPR="{l.all_settings:CURRENT_AUCTION NE 0}">
 	
-		<script type="text/javascript" src="http://ayopa-resources.s3.amazonaws.com/js/jquery-1.3.2.min.js"></script>
-		<script type="text/javascript" src="http://ayopa-resources.s3.amazonaws.com/js/jquery.qtip-1.0.0-rc3.min.js"></script>
+		<script type="text/javascript" src="https://ayopa-resources.s3.amazonaws.com/js/jquery-1.3.2.min.js"></script>
+		<script type="text/javascript" src="https://ayopa-resources.s3.amazonaws.com/js/jquery.qtip-1.0.0-rc3.min.js"></script>
 		<script>
 		$(document).ready(function(){
 			$('#ayopa_btn').qtip({
@@ -102,7 +102,7 @@
 		</script>
 
 
-			<div class="purchase-buttons"><input type="image" id="ayopa_btn" src="http://ayopa-resources.s3.amazonaws.com/images/buy_and_save.png" value="Buy with Ayopa" onClick="bwa();" /><br />
+			<div class="purchase-buttons"><input type="image" id="ayopa_btn" src="https://ayopa-resources.s3.amazonaws.com/images/buy_and_save.png" value="Buy with Ayopa" onClick="bwa();" /><br />
 		<MvEVAL EXPR="{'<iframe src="http://beta.ayopasoft.com/AyopaServer/display-auction-button?auctionID=' $ l.all_settings:CURRENT_AUCTION $ '" frameborder="0" width="250px" height="120px" scrolling="no"></iframe>'}" /> 
 		<div id="ayopa"></div>
 

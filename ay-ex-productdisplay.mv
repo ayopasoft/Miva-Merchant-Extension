@@ -22,6 +22,7 @@
 
 <MvFUNCTION NAME="ComponentModule_Initialize" PARAMETERS="module var,item,all_settings var,settings var" STANDARDOUTPUTLEVEL="">
 	<MvIF EXPR = "{ g.Screen EQ 'PROD' }">
+		<MvASSIGN NAME="l.all_settings:current_auction" VALUE="0">
 		<MvASSIGN NAME="l.all_settings:current_auction" VALUE="{ Ayopa_Auction(l.all_settings:PRODUCT:CUSTOMFIELD_VALUES:AYOPA_CUSTOMFIELDS:AUCTION_ID, l.all_settings:product:id) }">
 		
 	</MvIF>
@@ -56,6 +57,7 @@
 	<MvASSIGN NAME="l.url" VALUE="{ 'http://beta.ayopasoft.com/AyopaServer/miva/check-login?username=' $ ProductFields.d.username $ '&password=' $ ProductFields.d.password }">
 	<MvASSIGN NAME="l.return" VALUE="0">
 	
+	<MIVA MvCALL_ERROR = "nonfatal, nodisplay">
 	<MvCALL ACTION="{ l.url }"  METHOD="GET" >
 		<MvIF EXPR = "{ s.callobjecttype EQ 'tag' AND tolower(s.callobjectelement) EQ 'merchant_id'}">
 		        <MvASSIGN NAME="l.posn" VALUE="{ 1 }">
@@ -90,6 +92,7 @@
 		<MvASSIGN NAME="l.url" VALUE="{ 'http://beta.ayopasoft.com/AyopaServer/miva/get-current-auction-for-product?merchantID=' $ l.merchant_id $ '&productID=' $ l.product_id }">
 		<MvASSIGN NAME="l.return" VALUE="0">
 	
+		<MIVA MvCALL_ERROR = "nonfatal, nodisplay"> 
 		<MvCALL ACTION="{ l.url }"  METHOD="GET" >
 			<MvIF EXPR="{ s.callobjecttype EQ 'tag' }">
 				<MvCALLCONTINUE>

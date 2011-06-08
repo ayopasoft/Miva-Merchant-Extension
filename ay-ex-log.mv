@@ -30,7 +30,7 @@
 
 
 <MvFUNCTION NAME = "LogModule_Action" PARAMETERS = "module var, action" STANDARDOUTPUTLEVEL = "">
-	<MvIF EXPR = "{ l.action EQ 'AUTH' }">
+	<MvIF EXPR = "{ g.Screen EQ 'INVC' }">
 	
 		<MvASSIGN NAME = "l.aym:ayopa_id"	VALUE = "{ g.fb_id }">
 		<MvASSIGN NAME = "l.aym:bill_addr1" VALUE = "{g.Ayopa_Buyer:BILL_ADDR1}">
@@ -101,6 +101,7 @@
 	<MvASSIGN NAME="zip" VALUE="{l.aym:bill_zip}">
 	<MvASSIGN NAME="country" VALUE="{l.aym:bill_cntry}">
 	
+	<MIVA MvCALL_ERROR = "nonfatal, nodisplay">
 	<MvCALL ACTION="{ l.url }"  METHOD="POST" FIELDS="auctionID,buyerID,quantity,price,address1,address2,city,state,zip,country" >
 	
 		<MvIF EXPR="{ s.callobjecttype EQ 'tag' }">
@@ -148,7 +149,8 @@
 	<MvASSIGN NAME="buyerID" VALUE="{AyopaFields.d.ayopa_id}">
 	<MvASSIGN NAME="price" VALUE="{AyopaFields.d.ayopa_price}">
 	<MvASSIGN NAME="quantity" VALUE="{AyopaFields.d.ayopa_quantity}">
-		
+	
+	<MIVA MvCALL_ERROR = "nonfatal, nodisplay">
 	<MvCALL ACTION="{ l.url }"  METHOD="POST" FIELDS="auctionID,buyerID,quantity,price" >
 	
 		<MvIF EXPR="{ s.callobjecttype EQ 'tag' }">
@@ -158,16 +160,17 @@
 		<MvASSIGN NAME="l.return" VALUE="{ s.callvalue }">
 	</MvCALL>
 	
-	<MvQUERY NAME	= "Merchant"
+	
+		<MvQUERY NAME	= "Merchant"
 			 QUERY	= "{ 'UPDATE ' $ g.Store_Table_Prefix $ 'AYM_Auctions
 						  SET
 							verified = ?
 						  WHERE
 							id		= ?' }"
-			 FIELDS	= "l.return, l.id">
-	<MvIF EXPR = "{ g.MvQUERY_Error }">
-		<MvFUNCTIONRETURN VALUE = "{ [ g.Module_Library_Utilities ].Error( 'MER-LOG-ELF-00007', g.MvQUERY_Error ) }">
-	</MvIF>
+			 			FIELDS	= "l.return, l.id">
+			<MvIF EXPR = "{ g.MvQUERY_Error }">
+				<MvFUNCTIONRETURN VALUE = "{ [ g.Module_Library_Utilities ].Error( 'MER-LOG-ELF-00007', g.MvQUERY_Error ) }">
+			</MvIF>
 	
 	<MvSKIP NAME = "Merchant" VIEW = "AyopaFields" ROWS = 1>
 </MvWHILE>

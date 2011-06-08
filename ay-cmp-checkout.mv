@@ -120,12 +120,12 @@
 	
 		<MvIF EXPR = "{g.Ayopa:AYOPA EQ 1}"> 
 		
-		<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.4/jquery.min.js"></script>
-		<script src="http://ayopa-resources.s3.amazonaws.com/js/jquery.fancybox-1.3.4/fancybox/jquery.fancybox-1.3.4.js"></script>
-		<script src="http://ayopa-resources.s3.amazonaws.com/js/jquery.fancybox-1.3.4/fancybox/jquery.fancybox-1.3.4.pack.js"></script>
-		<script src="http://ayopa-resources.s3.amazonaws.com/js/jquery.alert.js"></script>
-		<link href="http://ayopa-resources.s3.amazonaws.com/js/jquery.fancybox-1.3.4/fancybox/jquery.fancybox-1.3.4.css" type="text/css" rel="stylesheet">
-		<link href="http://ayopa-resources.s3.amazonaws.com/css/jquery.alert.css" type="text/css" rel="stylesheet">
+		<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.4/jquery.min.js"></script>
+		<script src="https://ayopa-resources.s3.amazonaws.com/js/jquery.fancybox-1.3.4/fancybox/jquery.fancybox-1.3.4.js"></script>
+		<script src="https://ayopa-resources.s3.amazonaws.com/js/jquery.fancybox-1.3.4/fancybox/jquery.fancybox-1.3.4.pack.js"></script>
+		<script src="https://ayopa-resources.s3.amazonaws.com/js/jquery.alert.js"></script>
+		<link href="https://ayopa-resources.s3.amazonaws.com/js/jquery.fancybox-1.3.4/fancybox/jquery.fancybox-1.3.4.css" type="text/css" rel="stylesheet">
+		<link href="https://ayopa-resources.s3.amazonaws.com/css/jquery.alert.css" type="text/css" rel="stylesheet">
 		
 
 
