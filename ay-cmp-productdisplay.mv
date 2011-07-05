@@ -59,60 +59,78 @@
 
 <MvFUNCTION NAME = "ComponentModule_Render_Start" PARAMETERS = "module var, item, all_settings var, settings var, param" STANDARDOUTPUTLEVEL = "text, html, compresswhitespace">
 	
-	
-	
-	<MvIF EXPR="{l.all_settings:CURRENT_AUCTION NE 0}">
-	
-		<script type="text/javascript" src="https://ayopa-resources.s3.amazonaws.com/js/jquery-1.3.2.min.js"></script>
-		<script type="text/javascript" src="https://ayopa-resources.s3.amazonaws.com/js/jquery.qtip-1.0.0-rc3.min.js"></script>
-		<script>
-		$(document).ready(function(){
-			$('#ayopa_btn').qtip({
-		   		content: {url:'/hover.html', title: {text:'The More Buyers Join, The Bigger Your Rebate',button: 'Close'}},
-		   		show: { when: 'mouseover' },
-		   		hide: 'unfocus',
-		   		style: { tip: true, name: 'light', width: {min:'500', max: '600'} },
-				position: {
-	      				corner: {
-	         			target: 'leftMiddle',
-	         			tooltip: 'rightMiddle'}
-	   			}
+	<MvIF EXPR="{l.param EQ 'external'}">
+		<MvIF EXPR="{l.all_settings:CURRENT_AUCTION NE 0}">
 
-			});
-		});
-		</script>
+			<script type="text/javascript" src="http://ayopa-resources.s3.amazonaws.com/js/jquery-1.4.4.min.js"></script>
+			<script type="text/javascript" src="https://ayopa-resources.s3.amazonaws.com/js/jquery.qtip-1.0.0-rc3.min.js"></script>
+		</MvIF>
+		
+	<MvELSEIF EXPR="{l.param EQ 'groupbuy'}">
+		<MvIF EXPR="{l.all_settings:CURRENT_AUCTION NE 0}">
 
-		<script>
-		   function bwa()
-		   {
-			
-			<MvFOREACH ITERATOR = "l.attribute" ARRAY = "l.all_settings:attributes" INDEX = "l.pos">
-				<MvIF EXPR="{l.attribute:code EQ 'Ayopa'}">
-					<MvEVAL EXPR="{'var index = ' $ l.attribute:index}" />
-				</MvIF>
-			</MvFOREACH>
-			
+			<script>
+			jQuery(document).ready(function(){
+				jQuery('#ayopa_about').qtip({
+				   		content: jQuery('<iframe src="http://ayopa-resources.s3.amazonaws.com/plugins/hover.html" frameborder="0" width="750px" height="400px" scrolling="no"></iframe>'),
+				   		show: { when: {event: 'mouseover'} },
+				   		hide: 'unfocus',
+				   		style: { tip: true, name: 'light', width: {min:'700', max: '760'}, height: {min:'700', max:'700'}},
+						position: {
+				  				corner: {
+				     			target: 'leftMiddle',
+				     			tooltip: 'rightMiddle'}
+						}
+
+				});
 				
-				<MvEVAL EXPR="{'var auction_id = "' $ l.all_settings:CURRENT_AUCTION $ '"'}" />
-		       document.getElementById('ayopa').innerHTML = '<input type="hidden" name="Product_Attributes[' + index + ']:value" value="' + auction_id + '"><input type="hidden" name="ayopa_index" value="' + name + '">';
+				jQuery('#ayopa_btn').qtip({
+				   		content: jQuery('<MvEVAL EXPR="{'<iframe src="http://beta.ayopasoft.com/AyopaServer/display-auction-button?auctionID=' $ l.all_settings:CURRENT_AUCTION $ '" frameborder="0" width="250px" height="120px" scrolling="no"></iframe>'}" /> '),
+				   		show: { when: 'mouseover' },
+				   		hide: 'unfocus',
+				   		style: { tip: true, name: 'light', width: {min:'300', max: '300'} },
+						position: {
+				  				corner: {
+				     			target: 'leftMiddle',
+				     			tooltip: 'rightMiddle'}
+						}
 
-			document.forms[1].submit();
-		   }
+				});
+			});
+			</script>
 
-		</script>
+			<script>
+			   function bwa()
+			   {
+
+				<MvFOREACH ITERATOR = "l.attribute" ARRAY = "l.all_settings:attributes" INDEX = "l.pos">
+					<MvIF EXPR="{l.attribute:code EQ 'Ayopa'}">
+						<MvEVAL EXPR="{'var index = ' $ l.attribute:index}" />
+					</MvIF>
+				</MvFOREACH>
 
 
-			<div class="purchase-buttons"><input type="image" id="ayopa_btn" src="https://ayopa-resources.s3.amazonaws.com/images/buy_and_save.png" value="Buy with Ayopa" onClick="bwa();" /><br />
-		<MvEVAL EXPR="{'<iframe src="http://beta.ayopasoft.com/AyopaServer/display-auction-button?auctionID=' $ l.all_settings:CURRENT_AUCTION $ '" frameborder="0" width="250px" height="120px" scrolling="no"></iframe>'}" /> 
-		<div id="ayopa"></div>
+					<MvEVAL EXPR="{'var auction_id = "' $ l.all_settings:CURRENT_AUCTION $ '"'}" />
+			       document.getElementById('ayopa').innerHTML = '<input type="hidden" name="Product_Attributes[' + index + ']:value" value="' + auction_id + '"><input type="hidden" name="ayopa_index" value="' + name + '">';
 
-		</div>
+				document.forms[1].submit();
+			   }
+
+			</script>
 
 
+				<div class="purchase-buttons">
+				<div style="float:right"><img src="http://ayopa-resources.s3.amazonaws.com/images/question.png" id="ayopa_about" /></div>
+				<input type="image" id="ayopa_btn" src="https://ayopa-resources.s3.amazonaws.com/images/buy_and_save.png" value="Buy with Ayopa" onClick="bwa();" />
+				<br />
+			
+			<div id="ayopa"></div>
 
-		<div class="clear"></div>
+			</div>
+
+		</MvIF>
 	</MvIF>
-
+	
 </MvFUNCTION>
 
 <MvFUNCTION NAME = "ComponentModule_Render_End" PARAMETERS = "module var, item, all_settings var, settings var, param" STANDARDOUTPUTLEVEL = "">

@@ -1,4 +1,4 @@
-<MIVA STANDARDOUTPUTLEVEL = "" IDENT = "$Id: ay-ex-log.mv 23979 2010-05-04 18:00:13Z burch $">
+<MIVA STANDARDOUTPUTLEVEL = "" IDENT = "$Id: ay-fulfill.mv 23979 2010-05-04 18:00:13Z burch $">
 
 <MvCOMMENT>
 |
@@ -20,18 +20,16 @@
 </MvCOMMENT>
 
 <MvFUNCTION NAME = "Module_Description" PARAMETERS = "module var" STANDARDOUTPUTLEVEL = "">
-	<MvASSIGN NAME = "l.module:code"		VALUE = "ay-ex-log">
-	<MvASSIGN NAME = "l.module:name"		VALUE = "Ayopa Log Extension">
+	<MvASSIGN NAME = "l.module:code"		VALUE = "ay-fulfill">
+	<MvASSIGN NAME = "l.module:name"		VALUE = "Ayopa Fulfillment">
 	<MvASSIGN NAME = "l.module:provider"	VALUE = "Ayopa">
 	<MvASSIGN NAME = "l.module:version"		VALUE = "5.6000">
 	<MvASSIGN NAME = "l.module:api_ver"		VALUE = "5.00">
-	<MvASSIGN NAME = "l.module:features"	VALUE = "log">
+	<MvASSIGN NAME = "l.module:features"	VALUE = "fulfill">
 </MvFUNCTION>
 
 
-<MvFUNCTION NAME = "LogModule_Action" PARAMETERS = "module var, action" STANDARDOUTPUTLEVEL = "">
-	<MvIF EXPR = "{ (g.Screen EQ 'INVC') }">
-	
+<MvFUNCTION NAME="FulfillmentModule_ProcessOrder" PARAMETERS="module var,order var" STANDARDOUTPUTLEVEL="">
 		<MvASSIGN NAME = "l.aym:ayopa_id"	VALUE = "{ g.fb_id }">
 		<MvASSIGN NAME = "l.aym:bill_addr1" VALUE = "{g.Ayopa_Buyer:BILL_ADDR1}">
 		<MvASSIGN NAME = "l.aym:bill_addr2" VALUE = "{g.Ayopa_Buyer:BILL_ADDR2}">
@@ -63,21 +61,11 @@
 		</MvWHILE>
 			
 		<MvASSIGN NAME = "{l.resend}" VALUE = "{ AYM_Resend() }">
-			
-			<MvFUNCTIONRETURN VALUE = 1>
-	</MvIF>
 
 	<MvFUNCTIONRETURN VALUE = 1>
 </MvFUNCTION>
 
-<MvFUNCTION NAME = "LogModule_Screen" PARAMETERS = "module var, screen" STANDARDOUTPUTLEVEL = "">
-	
-	<MvFUNCTIONRETURN VALUE = 1>
-</MvFUNCTION>
 
-<MvFUNCTION NAME = "LogModule_UIException" PARAMETERS = "module var, code" STANDARDOUTPUTLEVEL = "">
-	<MvFUNCTIONRETURN VALUE = 1>
-</MvFUNCTION>
 
 <MvFUNCTION NAME = "AYM_Insert" PARAMETERS = "aym var" STANDARDOUTPUTLEVEL = "">
 	<MvCOMMENT>

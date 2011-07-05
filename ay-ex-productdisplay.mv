@@ -37,14 +37,14 @@
 <MvFUNCTION NAME = "Ayopa_CheckLogin" PARAMETERS = "merchant_id var"  STANDARDOUTPUTLEVEL = "">
 	
 	<MvOPENVIEW NAME	= "Merchant"
-				VIEW	= "ProductFields"
+				VIEW	= "AyopaProductFields"
 				QUERY	= "{ 'SELECT * FROM ' $ g.Store_Table_Prefix $ 'AYM_Login' }">
 	<MvIF EXPR = "{ g.MvOPENVIEW_Error }">
 		<MvFUNCTIONRETURN VALUE = "{ [ g.Module_Library_Utilities ].Error( 'MER-UTL-CST-00068', g.MvOPENVIEW_Error ) }">
 	</MvIF>
 
-	<MvIF EXPR = "{ ProductFields.d.EOF }">
-		<MvCLOSEVIEW NAME = "Merchant" VIEW = "ProductFields">
+	<MvIF EXPR = "{ AyopaProductFields.d.EOF }">
+		<MvCLOSEVIEW NAME = "Merchant" VIEW = "AyopaProductFields">
 		<MvFUNCTIONRETURN VALUE = 0>
 	</MvIF>
 	
@@ -54,7 +54,7 @@
 					Send encrypted password - can Miva encrypt password to store in DB?
 	</MvCOMMENT>
 	
-	<MvASSIGN NAME="l.url" VALUE="{ 'http://beta.ayopasoft.com/AyopaServer/miva/check-login?username=' $ ProductFields.d.username $ '&password=' $ ProductFields.d.password }">
+	<MvASSIGN NAME="l.url" VALUE="{ 'http://beta.ayopasoft.com/AyopaServer/miva/check-login?username=' $ AyopaProductFields.d.username $ '&password=' $ AyopaProductFields.d.password }">
 	<MvASSIGN NAME="l.return" VALUE="0">
 	
 	<MIVA MvCALL_ERROR = "nonfatal, nodisplay">
@@ -73,8 +73,8 @@
 		    </MvIF>
 
 	</MvCALL>
-
-	<MvFUNCTIONRETURN VALUE = "1">
+	<MvCLOSEVIEW NAME = "Merchant" VIEW = "AyopaProductFields">
+	<MvFUNCTIONRETURN VALUE = "{l.merchant_id}">
 </MvFUNCTION>
 
 <MvFUNCTION NAME = "Ayopa_Auction" PARAMETERS = "auction_id, product_id" STANDARDOUTPUTLEVEL = "">

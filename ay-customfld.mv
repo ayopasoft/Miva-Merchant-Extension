@@ -854,7 +854,11 @@
 			Product Image:
 			</td>
 			<td width="100%">
-				<input type="hidden" size=25 name="AYM_Data[6]"   id = "product_image" value="{ encodeentities( g.Domain:BASE_URL $ l.product:thumbnail ) }"><img src="{ encodeentities(g.Domain:BASE_URL $ l.product:thumbnail) }" width="100px">
+				<MvIF EXPR="{('http://' IN l.product:thumbnail) EQ 0}">
+					<input type="hidden" size=25 name="AYM_Data[6]"   id = "product_image" value="{ encodeentities( g.Domain:BASE_URL $ l.product:thumbnail ) }"><img src="{ encodeentities(g.Domain:BASE_URL $ l.product:thumbnail) }" width="100px">
+				<MvELSE>
+					<input type="hidden" size=25 name="AYM_Data[6]"   id = "product_image" value="{ encodeentities( l.product:thumbnail ) }"><img src="{ encodeentities(l.product:thumbnail) }" width="100px">
+				</MvIF>
 			</td>
 		</tr>
 		</table>
