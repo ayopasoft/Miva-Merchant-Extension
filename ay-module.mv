@@ -1,0 +1,2272 @@
+<MIVA STANDARDOUTPUTLEVEL = "" IDENT = "$Id: ay-customfld.mv 23979 2010-05-04 18:00:13Z burch $">
+
+<MvCOMMENT>
+|
+| Miva Merchant v5.x
+|
+| This file and the source codes contained herein are the property of
+| MSB Acquisition, Inc. d/b/a Miva Merchant.  Use of this file is restricted
+| to the specific terms and conditions in the License Agreement associated
+| with this file.  Distribution of this file or portions of this file for
+| uses not covered by the License Agreement is not allowed without a
+| written agreement signed by an officer of MSB Acquisition, Inc. d/b/a Miva Merchant.
+|
+| Copyright 1998-2009 MSB Acquisition, Inc. d/b/a Miva Merchant  All rights reserved.
+| http://www.mivamerchant.com
+|
+| Prefix         : MER-UTL-CST-
+| Next Error Code: 137  
+|
+</MvCOMMENT>
+
+<MvFUNCTION NAME = "Module_Description" PARAMETERS = "module var" STANDARDOUTPUTLEVEL = "">
+	<MvASSIGN NAME = "l.module:code"		VALUE = "ay-module">
+	<MvASSIGN NAME = "l.module:name"		VALUE = "Ayopa Module">
+	<MvASSIGN NAME = "l.module:provider"	VALUE = "Ayopa">
+	<MvASSIGN NAME = "l.module:version"		VALUE = "5.60">
+	<MvASSIGN NAME = "l.module:api_ver"		VALUE = "5.00">
+	<MvASSIGN NAME = "l.module:features"	VALUE = "util, vis_util, vis_product, vis_productbe, fields_prod, system, fulfill, component, data_store, provision_store">
+</MvFUNCTION>
+
+<MvFUNCTION NAME = "Module_Install_Store" PARAMETERS = "module var" STANDARDOUTPUTLEVEL = "">
+	<MvIF EXPR = "{ NOT [ g.Module_Library_DB ].StoreKey_Insert( 'AYM_Fields', 1 ) }">
+		<MvFUNCTIONRETURN VALUE = 0>
+	</MvIF>
+
+	
+
+	<MvCOMMENT>
+	|
+	| Product Fields
+	|
+	</MvCOMMENT>
+
+	<MvQUERY NAME	= "Merchant"
+			 QUERY	= "{ 'CREATE TABLE ' $  g.Store_Table_Prefix $ 'AYM_ProdFields
+						  (
+							id		' $ [ g.Module_Library_Native_DBAPI ].DB_Type_NUMBER( 0, 0 ) $ ',
+							code	' $ [ g.Module_Library_Native_DBAPI ].DB_Type_CHAR( 50 ) $ ',
+							name	' $ [ g.Module_Library_Native_DBAPI ].DB_Type_CHAR( 100 ) $ '
+						  ) ' }">
+	<MvIF EXPR = "{ g.MvQUERY_Error }">
+		<MvFUNCTIONRETURN VALUE = "{ [ g.Module_Library_Utilities ].Error( 'MER-UTL-CST-00001', g.MvQUERY_Error ) }">
+	</MvIF>
+	
+
+
+	<MvQUERY NAME	= "Merchant"
+			 QUERY	= "{ 'CREATE UNIQUE INDEX ' $ g.Store_Table_Prefix $ 'AYM_ProdFields_1 ON ' $ g.Store_Table_Prefix $ 'AYM_ProdFields ( id )' }">
+	<MvIF EXPR = "{ g.MvQUERY_Error }">
+		<MvFUNCTIONRETURN VALUE = "{ [ g.Module_Library_Utilities ].Error( 'MER-UTL-CST-00002', g.MvQUERY_Error ) }">
+	</MvIF>
+
+	<MvQUERY NAME	= "Merchant"
+			 QUERY	= "{ 'CREATE INDEX ' $ g.Store_Table_Prefix $ 'AYM_ProdFields_2 ON ' $ g.Store_Table_Prefix $ 'AYM_ProdFields ( code )' }">
+	<MvIF EXPR = "{ g.MvQUERY_Error }">
+		<MvFUNCTIONRETURN VALUE = "{ [ g.Module_Library_Utilities ].Error( 'MER-UTL-CST-00003', g.MvQUERY_Error ) }">
+	</MvIF>
+	
+	<MvASSIGN NAME = "l.values" VALUE = "(1,'auction_id','Auction ID');">
+	<MvQUERY NAME	= "Merchant"
+			 QUERY	= "{ 'INSERT INTO ' $ g.Store_Table_Prefix $ 'AYM_ProdFields ( id, code, name ) VALUES ' $ l.values }">
+			 
+			<MvIF EXPR = "{ g.MvQUERY_Error }">
+				<MvFUNCTIONRETURN VALUE = "{ [ g.Module_Library_Utilities ].Error( 'MER-UTL-CST-00001', g.MvQUERY_Error ) }">
+			</MvIF>
+			
+	<MvCOMMENT>
+	-----------------------------------------
+	<MvASSIGN NAME = "l.values" VALUE = "(2,'product_id','Product ID');">
+	<MvQUERY NAME	= "Merchant"
+			QUERY	= "{ 'INSERT INTO ' $ g.Store_Table_Prefix $ 'AYM_ProdFields ( id, code, name ) VALUES ' $ l.values }">
+
+			<MvIF EXPR = "{ g.MvQUERY_Error }">
+				<MvFUNCTIONRETURN VALUE = "{ [ g.Module_Library_Utilities ].Error( 'MER-UTL-CST-00001', g.MvQUERY_Error ) }">
+			</MvIF>
+	
+			<MvASSIGN NAME = "l.values" VALUE = "(3,'prod_name','Product Name');">
+			<MvQUERY NAME	= "Merchant"
+					QUERY	= "{ 'INSERT INTO ' $ g.Store_Table_Prefix $ 'AYM_ProdFields ( id, code, name ) VALUES ' $ l.values }">
+
+					<MvIF EXPR = "{ g.MvQUERY_Error }">
+						<MvFUNCTIONRETURN VALUE = "{ [ g.Module_Library_Utilities ].Error( 'MER-UTL-CST-00001', g.MvQUERY_Error ) }">
+					</MvIF>
+					
+			<MvASSIGN NAME = "l.values" VALUE = "(4,'prod_descr','Product Description');">
+					<MvQUERY NAME	= "Merchant"
+							QUERY	= "{ 'INSERT INTO ' $ g.Store_Table_Prefix $ 'AYM_ProdFields ( id, code, name ) VALUES ' $ l.values }">
+
+							<MvIF EXPR = "{ g.MvQUERY_Error }">
+								<MvFUNCTIONRETURN VALUE = "{ [ g.Module_Library_Utilities ].Error( 'MER-UTL-CST-00001', g.MvQUERY_Error ) }">
+							</MvIF>
+							
+			<MvASSIGN NAME = "l.values" VALUE = "(5,'auction_start','Auction Start');">
+					<MvQUERY NAME	= "Merchant"
+							QUERY	= "{ 'INSERT INTO ' $ g.Store_Table_Prefix $ 'AYM_ProdFields ( id, code, name ) VALUES ' $ l.values }">
+
+							<MvIF EXPR = "{ g.MvQUERY_Error }">
+								<MvFUNCTIONRETURN VALUE = "{ [ g.Module_Library_Utilities ].Error( 'MER-UTL-CST-00001', g.MvQUERY_Error ) }">
+							</MvIF>
+	
+	
+	<MvASSIGN NAME = "l.values" VALUE = "(6,'auction_end','Auction End');">
+	<MvQUERY NAME	= "Merchant"
+			QUERY	= "{ 'INSERT INTO ' $ g.Store_Table_Prefix $ 'AYM_ProdFields ( id, code, name ) VALUES ' $ l.values }">
+
+			<MvIF EXPR = "{ g.MvQUERY_Error }">
+				<MvFUNCTIONRETURN VALUE = "{ [ g.Module_Library_Utilities ].Error( 'MER-UTL-CST-00001', g.MvQUERY_Error ) }">
+			</MvIF>
+			
+			
+	<MvASSIGN NAME = "l.values" VALUE = "(7,'auction_maxunits','Auction Max Units');">
+	<MvQUERY NAME	= "Merchant"
+		QUERY	= "{ 'INSERT INTO ' $ g.Store_Table_Prefix $ 'AYM_ProdFields ( id, code, name ) VALUES ' $ l.values }">
+
+		<MvIF EXPR = "{ g.MvQUERY_Error }">
+				<MvFUNCTIONRETURN VALUE = "{ [ g.Module_Library_Utilities ].Error( 'MER-UTL-CST-00001', g.MvQUERY_Error ) }">
+		</MvIF>	
+	
+		<MvASSIGN NAME = "l.values" VALUE = "(8,'auction_startprice','Auction Start Price');">
+		<MvQUERY NAME	= "Merchant"
+				QUERY	= "{ 'INSERT INTO ' $ g.Store_Table_Prefix $ 'AYM_ProdFields ( id, code, name ) VALUES ' $ l.values }">
+
+				<MvIF EXPR = "{ g.MvQUERY_Error }">
+					<MvFUNCTIONRETURN VALUE = "{ [ g.Module_Library_Utilities ].Error( 'MER-UTL-CST-00001', g.MvQUERY_Error ) }">
+				</MvIF>
+				
+		<MvASSIGN NAME = "l.values" VALUE = "(9,'product_image','Product Image');">
+		<MvQUERY NAME	= "Merchant"
+				QUERY	= "{ 'INSERT INTO ' $ g.Store_Table_Prefix $ 'AYM_ProdFields ( id, code, name ) VALUES ' $ l.values }">
+
+				<MvIF EXPR = "{ g.MvQUERY_Error }">
+					<MvFUNCTIONRETURN VALUE = "{ [ g.Module_Library_Utilities ].Error( 'MER-UTL-CST-00001', g.MvQUERY_Error ) }">
+				</MvIF>
+	-----------------------------------------			
+    </MvCOMMENT>
+
+	<MvQUERY NAME	= "Merchant"
+			 QUERY	= "{ 'CREATE TABLE ' $  g.Store_Table_Prefix $ 'AYM_ProdValues
+						  (
+							field_id	' $ [ g.Module_Library_Native_DBAPI ].DB_Type_NUMBER( 0, 0 )	$ ',
+							product_id	' $ [ g.Module_Library_Native_DBAPI ].DB_Type_NUMBER( 0, 0 )	$ ',
+							value		' $ [ g.Module_Library_Native_DBAPI ].DB_Type_CHAR( 254 )		$ ',
+							value_long	' $ [ g.Module_Library_Native_DBAPI ].DB_Type_MEMO()			$ '
+						  ) ' }">
+	<MvIF EXPR = "{ g.MvQUERY_Error }">
+		<MvFUNCTIONRETURN VALUE = "{ [ g.Module_Library_Utilities ].Error( 'MER-UTL-CST-00004', g.MvQUERY_Error ) }">
+	</MvIF>
+
+	<MvQUERY NAME	= "Merchant"
+			 QUERY	= "{ 'CREATE UNIQUE INDEX ' $ g.Store_Table_Prefix $ 'AYM_ProdValues_1 ON ' $ g.Store_Table_Prefix $ 'AYM_ProdValues ( product_id, field_id )' }">
+	<MvIF EXPR = "{ g.MvQUERY_Error }">
+		<MvFUNCTIONRETURN VALUE = "{ [ g.Module_Library_Utilities ].Error( 'MER-UTL-CST-00005', g.MvQUERY_Error ) }">
+	</MvIF>
+
+	<MvQUERY NAME	= "Merchant"
+			 QUERY	= "{ 'CREATE TABLE ' $  g.Store_Table_Prefix $ 'AYM_Auctions
+						  (
+							id          ' $ [ g.Module_Library_Native_DBAPI ].DB_Type_CHAR( 100 ) $ ',
+							auction_id	' $ [ g.Module_Library_Native_DBAPI ].DB_Type_CHAR( 100 ) $ ',
+							ayopa_id	' $ [ g.Module_Library_Native_DBAPI ].DB_Type_CHAR( 100 ) $ ',
+							quantity	' $ [ g.Module_Library_Native_DBAPI ].DB_Type_NUMBER( 0, 0 ) $ ',
+							price		' $ [ g.Module_Library_Native_DBAPI ].DB_Type_CHAR( 100 ) $ ',
+							sent		' $ [ g.Module_Library_Native_DBAPI ].DB_Type_CHAR( 100 ) $ ',
+							verified	' $ [ g.Module_Library_Native_DBAPI ].DB_Type_CHAR( 100 ) $ '
+						  ) ' }">
+	<MvIF EXPR = "{ g.MvQUERY_Error }">
+		<MvFUNCTIONRETURN VALUE = "{ [ g.Module_Library_Utilities ].Error( 'MER-UTL-CST-00001', g.MvQUERY_Error ) }">
+	</MvIF>
+	
+	<MvQUERY NAME	= "Merchant"
+			 QUERY	= "{ 'CREATE TABLE ' $  g.Store_Table_Prefix $ 'AYM_Login
+						  (
+							login_id		' $ [ g.Module_Library_Native_DBAPI ].DB_Type_NUMBER( 0, 0 ) $ ',
+							username	' $ [ g.Module_Library_Native_DBAPI ].DB_Type_CHAR( 100 ) $ ',
+							password	' $ [ g.Module_Library_Native_DBAPI ].DB_Type_CHAR( 100 ) $ '
+						  ) ' }">
+	<MvIF EXPR = "{ g.MvQUERY_Error }">
+		<MvFUNCTIONRETURN VALUE = "{ [ g.Module_Library_Utilities ].Error( 'MER-UTL-CST-00001', g.MvQUERY_Error ) }">
+	</MvIF>
+	
+	<MvQUERY NAME	= "Merchant"
+			 QUERY	= "{ 'CREATE UNIQUE INDEX ' $ g.Store_Table_Prefix $ 'AYM_Login_Index ON ' $ g.Store_Table_Prefix $ 'AYM_Login ( login_id )' }">
+	<MvIF EXPR = "{ g.MvQUERY_Error }">
+		<MvFUNCTIONRETURN VALUE = "{ [ g.Module_Library_Utilities ].Error( 'MER-UTL-CST-00005', g.MvQUERY_Error ) }">
+	</MvIF>
+	
+	
+
+	<MvFUNCTIONRETURN VALUE = 1>
+</MvFUNCTION>
+
+<MvFUNCTION NAME = "Module_Upgrade_Store" PARAMETERS = "module var, version" STANDARDOUTPUTLEVEL = "">
+
+	<MvFUNCTIONRETURN VALUE = 1>
+</MvFUNCTION>
+
+<MvFUNCTION NAME = "Module_Uninstall_Store" PARAMETERS = "module var" STANDARDOUTPUTLEVEL = "" ERROROUTPUTLEVEL = "">
+	<MvCOMMENT>
+	<MvASSIGN NAME = "l.null" VALUE = "{ [ g.Module_Library_DB ].StoreKey_Delete( 'AYM_Fields' ) }">
+
+	<MvQUERY NAME = "Merchant" QUERY = "{ 'DROP TABLE ' $  g.Store_Table_Prefix $ 'AYM_ProdFields' }">
+	<MvQUERY NAME = "Merchant" QUERY = "{ 'DROP TABLE ' $  g.Store_Table_Prefix $ 'AYM_ProdValues' }">
+	<MvQUERY NAME = "Merchant" QUERY = "{ 'DROP TABLE ' $  g.Store_Table_Prefix $ 'AYM_Auctions' }">
+	<MvQUERY NAME = "Merchant" QUERY = "{ 'DROP TABLE ' $  g.Store_Table_Prefix $ 'AYM_Login' }">
+	</MvCOMMENT>
+	<MvFUNCTIONRETURN VALUE = 1>
+</MvFUNCTION>
+
+
+
+<MvFUNCTION NAME = "Module_Product_Tabs" PARAMETERS = "module var, product var" STANDARDOUTPUTLEVEL = "">
+	<MvIF EXPR = "{ ProductFields_Count() }">
+		<MvFUNCTIONRETURN VALUE = "AYM:Ayopa">
+	</MvIF>
+
+	<MvFUNCTIONRETURN VALUE = "">
+</MvFUNCTION>
+
+<MvFUNCTION NAME = "Ayopa_CheckLogin" PARAMETERS = "merchant_id var, merchant_name var, merchant_website var"  STANDARDOUTPUTLEVEL = "">
+	
+	<MvOPENVIEW NAME	= "Merchant"
+				VIEW	= "ProductFields"
+				QUERY	= "{ 'SELECT * FROM ' $ g.Store_Table_Prefix $ 'AYM_Login' }">
+	<MvIF EXPR = "{ g.MvOPENVIEW_Error }">
+		<MvFUNCTIONRETURN VALUE = "{ [ g.Module_Library_Utilities ].Error( 'MER-UTL-CST-00068', g.MvOPENVIEW_Error ) }">
+	</MvIF>
+
+	<MvIF EXPR = "{ ProductFields.d.EOF }">
+		<MvCLOSEVIEW NAME = "Merchant" VIEW = "ProductFields">
+		<MvFUNCTIONRETURN VALUE = 0>
+	</MvIF>
+	
+	<MvCOMMENT>
+		Server call: http://www.ayopadev.com/ayopa/check_login.php? 
+		   http://ayopa1dev.happyjacksoftware.com:8080/AyopaServer/AyopaServer/miva/check-login?username=&password=
+					Send encrypted password - can Miva encrypt password to store in DB?
+	</MvCOMMENT>
+	
+	<MvASSIGN NAME="l.url" VALUE="{ 'http://beta.ayopasoft.com/AyopaServer/miva/check-login?username=' $ ProductFields.d.username $ '&password=' $ ProductFields.d.password }">
+	<MvASSIGN NAME="l.return" VALUE="0">
+	
+	<MIVA MvCALL_ERROR = "nonfatal, nodisplay">
+	<MvCALL ACTION="{ l.url }"  METHOD="GET" >
+		<MvIF EXPR = "{ s.callobjecttype EQ 'tag' AND tolower(s.callobjectelement) EQ 'merchant_id'}">
+		        <MvASSIGN NAME="l.posn" VALUE="{ 1 }">
+		        <MvWHILE EXPR="{ l.posn LE s.callobjectnumattributes }">
+		            <MvIF EXPR="{ tolower(s.callobjectattribute[l.posn]) EQ 'value' }">
+		                <MvASSIGN NAME="l.ndx" VALUE="{ l.ndx + 1 }">
+		                <MvASSIGN NAME="l.merchant_id" VALUE="{ s.callobjectvalue[l.posn] }"> 
+		                <MvWHILESTOP>
+		            </MvIF> 
+		            <MvASSIGN NAME="l.posn" VALUE="{ l.posn + 1 }">
+		        </MvWHILE>
+				<MvCALLCONTINUE>
+		    </MvIF>
+			<MvIF EXPR = "{ s.callobjecttype EQ 'tag' AND tolower(s.callobjectelement) EQ 'merchant_name'}">
+			        <MvASSIGN NAME="l.posn" VALUE="{ 1 }">
+			        <MvWHILE EXPR="{ l.posn LE s.callobjectnumattributes }">
+			            <MvIF EXPR="{ tolower(s.callobjectattribute[l.posn]) EQ 'value' }">
+			                <MvASSIGN NAME="l.ndx" VALUE="{ l.ndx + 1 }">
+			                <MvASSIGN NAME="l.merchant_name" VALUE="{ s.callobjectvalue[l.posn] }"> 
+			                <MvWHILESTOP>
+			            </MvIF> 
+			            <MvASSIGN NAME="l.posn" VALUE="{ l.posn + 1 }">
+			        </MvWHILE>
+					<MvCALLCONTINUE>
+			    </MvIF>
+				<MvIF EXPR = "{ s.callobjecttype EQ 'tag' AND tolower(s.callobjectelement) EQ 'merchant_website'}">
+				        <MvASSIGN NAME="l.posn" VALUE="{ 1 }">
+				        <MvWHILE EXPR="{ l.posn LE s.callobjectnumattributes }">
+				            <MvIF EXPR="{ tolower(s.callobjectattribute[l.posn]) EQ 'value' }">
+				                <MvASSIGN NAME="l.ndx" VALUE="{ l.ndx + 1 }">
+				                <MvASSIGN NAME="l.merchant_website" VALUE="{ s.callobjectvalue[l.posn] }"> 
+				                <MvWHILESTOP>
+				            </MvIF> 
+				            <MvASSIGN NAME="l.posn" VALUE="{ l.posn + 1 }">
+				        </MvWHILE>
+						<MvCALLCONTINUE>
+				    </MvIF>
+		
+	</MvCALL>
+
+	<MvFUNCTIONRETURN VALUE = "1">
+</MvFUNCTION>
+
+<MvCOMMENT>
+	Replaced Ayopa_Login with Ayopa_CheckLogin
+</MvCOMMENT>
+<MvFUNCTION NAME = "Ayopa_Login"  STANDARDOUTPUTLEVEL = "">
+	<MvOPENVIEW NAME	= "Merchant"
+				VIEW	= "ProductFields"
+				QUERY	= "{ 'SELECT * FROM ' $ g.Store_Table_Prefix $ 'AYM_Login' }">
+	<MvIF EXPR = "{ g.MvOPENVIEW_Error }">
+		<MvFUNCTIONRETURN VALUE = "{ [ g.Module_Library_Utilities ].Error( 'MER-UTL-CST-00068', g.MvOPENVIEW_Error ) }">
+	</MvIF>
+
+	<MvIF EXPR = "{ ProductFields.d.EOF }">
+		<MvCLOSEVIEW NAME = "Merchant" VIEW = "ProductFields">
+		<MvFUNCTIONRETURN VALUE = 0>
+	</MvIF>
+	
+	<MvCOMMENT>
+		Server call: check-login?username=&password=
+	</MvCOMMENT>
+	
+	<MvCOMMENT>
+		Server call: http://ayopa1dev.happyjacksoftware.com/miva/check-login?username=&password= http://www.ayopadev.com/ayopa/check_login.php?
+					Send encrypted password - can Miva encrypt password to store in DB?
+	</MvCOMMENT>
+	
+	<MvASSIGN NAME="l.url" VALUE="{ 'http://beta.ayopasoft.com/AyopaServer/miva/check-login?username=' $ ProductFields.d.username $ '&password=' $ ProductFields.d.password }">
+	<MvASSIGN NAME="l.return" VALUE="0">
+	
+	<MIVA MvCALL_ERROR = "nonfatal, nodisplay">
+	<MvCALL ACTION="{ l.url }"  METHOD="GET" >
+		<MvIF EXPR="{ s.callobjecttype EQ 'tag' }">
+			<MvCALLCONTINUE>
+		</MvIF>
+		
+		<MvASSIGN NAME="l.return" VALUE="{ s.callvalue }">
+	</MvCALL>
+
+	<MvCLOSEVIEW NAME = "Merchant" VIEW = "ProductFields">
+
+	<MvFUNCTIONRETURN VALUE = "{ l.return }">
+</MvFUNCTION>
+
+
+<MvFUNCTION NAME = "Ayopa_Active_Auction" PARAMETERS = "merchant_id, product_id"  STANDARDOUTPUTLEVEL = "">
+	
+	<MvCOMMENT>
+		Server call: http://ayopa1dev.happyjacksoftware.com:8080/AyopaServer/get-auction-for-product?merchantID=&productID=
+		
+		http://www.ayopadev.com/ayopa/active_auction.php?merchant_id=
+	</MvCOMMENT>
+		
+	<MvASSIGN NAME="l.url" VALUE="{ 'http://beta.ayopasoft.com/AyopaServer/get-auction-for-product?merchantID=' $ l.merchant_id $ '&productID=' $ l.product_id }">
+	<MvASSIGN NAME="l.return" VALUE="0">
+	
+	<MvCALL ACTION="{ l.url }"  METHOD="GET" >
+		<MvIF EXPR="{ s.callobjecttype EQ 'tag' }">
+			<MvCALLCONTINUE>
+		</MvIF>
+		
+		<MvASSIGN NAME="l.return" VALUE="{ s.callvalue }">
+	</MvCALL>
+
+
+	<MvFUNCTIONRETURN VALUE = "{ l.return }">
+</MvFUNCTION>
+
+
+<MvFUNCTION NAME = "Ayopa_Categories" PARAMETERS = "categories var"  STANDARDOUTPUTLEVEL = "">
+	
+	<MvCOMMENT>
+		Server call: http://www.ayopadev.com/ayopa/categories.php
+	</MvCOMMENT>
+	
+	<MvASSIGN NAME="l.url" VALUE="{ 'http://beta.ayopasoft.com/AyopaServer/miva/get-categories' }">
+	<MvASSIGN NAME="l.return" VALUE="0">
+	
+	<MIVA MvCALL_ERROR = "nonfatal, nodisplay">
+	<MvCALL ACTION="{ l.url }"  METHOD="GET" >
+		<MvIF EXPR = "{ s.callobjecttype EQ 'tag' AND tolower(s.callobjectelement) EQ 'category'}">
+		        <MvASSIGN NAME="l.posn" VALUE="{ 1 }">
+		        <MvWHILE EXPR="{ l.posn LE s.callobjectnumattributes }">
+		            <MvIF EXPR="{ tolower(s.callobjectattribute[l.posn]) EQ 'value' }">
+		                <MvASSIGN NAME="l.ndx" VALUE="{ l.ndx + 1 }">
+		                <MvASSIGN NAME="l.categories" INDEX="{ l.ndx }" VALUE="{ s.callobjectvalue[l.posn] }"> 
+		                <MvWHILESTOP>
+		            </MvIF> 
+		            <MvASSIGN NAME="l.posn" VALUE="{ l.posn + 1 }">
+		        </MvWHILE>
+		    </MvIF>
+		
+	</MvCALL>
+
+
+	<MvFUNCTIONRETURN VALUE = "1">
+</MvFUNCTION>
+
+
+<MvFUNCTION NAME = "Module_Product_Content" PARAMETERS = "module var, tab, load_fields, product var" STANDARDOUTPUTLEVEL = "text, html, compresswhitespace">
+	<MvIF EXPR = "{ g.Load_Fields }">
+		<MvASSIGN NAME = "g.AYM_Fields"				VALUE = "">
+		<MvASSIGN NAME = "g.AYM_Categories"				VALUE = "">
+		<MvASSIGN NAME = "g.AYM_Category_Count" VALUE = "{ Ayopa_Categories( g.AYM_Categories ) }">
+		
+		<MvIF EXPR = "{ l.product:id }">
+			<MvASSIGN NAME = "g.AYM_Field_Count"	VALUE = "{ ProductFieldList_Load_Values( l.product:id, g.AYM_Fields ) }">
+		<MvELSE>
+			<MvASSIGN NAME = "g.AYM_Field_Count"	VALUE = "{ ProductFieldList_Load_All( g.AYM_Fields ) }">
+		</MvIF>
+	
+	</MvIF>
+
+	<MvHIDE FIELDS = "g.AYM_Field_Count">
+
+	<MvIF EXPR = "{ g.Tab EQ 'AYM' }">
+	
+		
+		
+		<MvASSIGN NAME = "l.merchant_name" VALUE="">
+		<MvASSIGN NAME = "l.merchant_id" VALUE="">
+		<MvASSIGN NAME = "l.merchant_website" VALUE="">
+		
+		<MvASSIGN NAME = "l.login" VALUE="{ Ayopa_CheckLogin(l.merchant_id, l.merchant_name, l.merchant_website) }">
+		
+		<MvIF EXPR = "{ l.merchant_id NE '0' }">
+			<MvASSIGN NAME = "l.active_auction" VALUE = "{ Ayopa_Active_Auction(l.merchant_id, l.product:id) }">
+		<MvELSE>
+			<script>
+				alert ("Authentication Error: Please check your Ayopa login in Utility settings.");
+			</script>
+		</MvIF>
+	
+		<style>#field { margin-left: .5em; float: left; }
+		  	#field, label { float: left; font-family: Arial, Helvetica, sans-serif; font-size: small; }
+			br { clear: both; }
+			input { border: 1px solid black; margin-bottom: .5em;  }
+			input.error { border: 1px solid red; }
+			label.error {
+				background: url('http://dev.jquery.com/view/trunk/plugins/validate/demo/images/unchecked.gif') no-repeat;
+				padding-left: 16px;
+				margin-left: .3em;
+			}
+			label.valid {
+				background: url('http://dev.jquery.com/view/trunk/plugins/validate/demo/images/checked.gif') no-repeat;
+				display: block;
+				width: 16px;
+				height: 16px;
+			}
+		</style>
+		
+		<script src="https://ayopa-resources.s3.amazonaws.com/js/jquery-1.3.2.min.js"></script>
+		<link href="https://ayopa-resources.s3.amazonaws.com/css/ui-lightness/jquery-ui-1.7.2.custom.css" rel="stylesheet" type="text/css">
+		<script type="text/javascript" src="https://ayopa-resources.s3.amazonaws.com/js/jquery-ui-1.7.2.custom.min.js"></script> 
+		<script language="javascript" src="https://ayopa-resources.s3.amazonaws.com/js/jquery.json.js"></script>
+		<script type="text/javascript" src="https://ayopa-resources.s3.amazonaws.com/js/timepicker.js"></script>
+		<script type="text/javascript" src="https://ayopa-resources.s3.amazonaws.com/js/json2.js"></script>
+		<script type="text/javascript" src="https://ayopa-resources.s3.amazonaws.com/js/jquery.crypt.js"></script>
+		<script type="text/javascript" src="https://ayopa-resources.s3.amazonaws.com/js/jquery.validate.min.js"></script>
+		<script>
+		
+		var active_json = <MvEVAL EXPR = "{ l.active_auction }">;
+		
+		function remFormField(){
+			$('#table_sched tr:last').remove();	
+		}
+		
+		function addFormField(dis,min,max,add) {
+		
+			dis = typeof(dis) != 'undefined' ? dis : '';
+			min = typeof(min) != 'undefined' ? min : '';
+			max = typeof(max) != 'undefined' ? max : '';
+			add = typeof(add) != 'undefined' ? add : '0';
+			
+		
+			var id = document.getElementById("sched_id").value;
+		
+		
+			var $table = $('#table_sched');
+	    	// Number of td's in the last table row
+			var n = $('tr:last td', $table).length;
+			var tds = "<tr>";
+			tds += "<td>$</td><td><input type='text' size='7' name='schedule[]' id='schedule_dis" + id + "' value='" + dis + "' title='Item discount given at this point in the schedule' class='required number'></td>";        
+			tds += "<td><input type='text' size='7' name='schedule[]' id='schedule_min" + id + "' value='" + min + "' title='Minimum quantity sold to reach this price point' class='required digits'></td>";    
+			tds += "<td><input type='text' size='7' name='schedule[]' id='schedule_max" + id + "' value='" + max + "' title='Maximum quantity sold allowed in this price point' class='required digits'></td>"; 
+			tds += "<td><input type='text' size='7' name='schedule[]' id='schedule_add" + id + "' value='" + add + "' title='Number of items beyond the minimum that triggers an additional discount' class='required digits'></td>";
+			tds += "</tr>";
+		        if($('tbody', $table).length > 0){
+		            $('tbody', $table ).append(tds);
+		        }else {
+					$table.append(tds);
+				}
+			id = (id - 1) + 2;				
+			document.getElementById("sched_id").value = id;
+						
+		}
+			
+		 jQuery(document).ready(function(){
+			
+			$("form[name^='PROD']").each(function(){
+			      $(this).validate();
+			});
+			
+			$(function() { 
+			 
+			 if (typeof(active_json.auction) != 'undefined' && active_json != 0 && active_json != null)
+			 {
+		  		$('#auction_id').val(active_json.auction.auction_id);
+				$('#product_name').val(active_json.auction.product_name);
+				$('#product_name').attr('disabled', 'disabled');
+				$('#product_descr').val(active_json.auction.product_descr);
+				$('#product_descr').attr('disabled', 'disabled');
+				$('#auction_start').val(active_json.auction.auction_start);
+				$('#auction_start').attr('disabled', 'disabled');
+				$('#auction_end').val(active_json.auction.auction_end);
+				$('#auction_end').attr('disabled', 'disabled');
+				$('#auction_maxunits').val(active_json.auction.auction_maxunits);
+				$('#auction_maxunits').attr('disabled', 'disabled');
+				$('#auction_startprice').val(active_json.auction.auction_startprice);
+				$('#auction_startprice').attr('disabled', 'disabled');
+				$('#auction_image').val(active_json.auction.auction_image);
+		        $('#auction_priceconflict').val(active_json.auction.pricing_conflict);
+				$('#auction_priceconflict').attr('disabled', 'disabled');
+				$('#AYM_category').val(active_json.auction.product_category);
+				
+				if (active_json.auction.auction_highlighted)
+				{
+				  $('#auction_highlighted').attr('checked','checked');
+				}
+				
+				var arLen=active_json.auction.auction_schedule.schedule_row.length;
+			
+				for (var i=0; i < arLen; ++i) 
+				{
+				  addFormField(active_json.auction.auction_schedule.schedule_row[i].dis,
+						active_json.auction.auction_schedule.schedule_row[i].min,
+						active_json.auction.auction_schedule.schedule_row[i].max,
+						active_json.auction.auction_schedule.schedule_row[i].add);
+				  
+				  $('#schedule_min' + (i + 1)).attr('disabled','disabled');
+				  $('#schedule_max' + (i + 1)).attr('disabled','disabled');
+				  $('#schedule_dis' + (i + 1)).attr('disabled', 'disabled');
+				  $('#schedule_add' + (i + 1)).attr('disabled', 'disabled');
+				}
+				
+				
+				$('#add_btn').hide();
+				$('#rem_btn').hide();
+				$('#hidefields').show();
+				$('#create_auction').hide();
+			}
+			else
+			{
+				$('#hidefields').hide();
+				
+				//blank out auction id
+				$('#auction_id').val("");
+			
+			}
+			
+			
+			
+			});
+
+		  $(function() {  
+		     $('#auction_start').datepicker({  
+		         duration:'',  
+		         showTime: true,  
+		         constrainInput: false,  
+		         stepMinutes: 1,  
+		         stepHours: 1,  
+		         altTimeField:'',  
+		         time24h: false,
+		   		 dateFormat: 'yy-mm-dd',
+				 timeFormat: 'hh:mmp'
+		      });  
+		 });
+		
+		$(function() {  
+		     $('#auction_end').datepicker({  
+		         duration:'',  
+		         showTime: true,  
+		         constrainInput: false,  
+		         stepMinutes: 1,  
+		         stepHours: 1,  
+		         altTimeField:'',  
+		         time24h: false,
+		         dateFormat: 'yy-mm-dd',
+		         timeFormat: 'hh:mmp'
+		      });  
+		 });
+			
+		 
+		jQuery("#btn_new_auction").click(function(){
+			$('#hidefields').show();
+			$('#create_auction').hide();
+		});
+		
+		jQuery("#btn_end_auction").click(function(){
+			var answer = confirm("Are you sure you want to end this auction?")
+		    if (answer){
+		        var url = "http://beta.ayopasoft.com/AyopaServer/end-auction?auctionID=" + $('#auction_id').val();
+
+				    $.getJSON(url + "&jsoncallback=?", function(data){
+				    Name = data.Name;
+				    Descr = data.Descr;
+					Auction = data.auction_id;
+
+				    if(Auction != "")
+				    {
+				     jQuery("#auction_id").val(Auction);
+				     SubmitForm( 'PROD', 'UPRD' );
+				    }
+				    else
+				    {
+				     jQuery("#auction_id").html("No Auction ID returned!!!");
+				    }
+
+				   })
+		    }
+		});
+						
+		  jQuery("#btn").click(function(){
+
+		   $("form[name^='PROD']").valid();
+		
+		    var counter = 0;    
+		    var schedule = [];
+		                       
+			$("input[id*='schedule_dis']").each(function(){
+			   if ($('schedule_dis' + counter).val() != ''){
+					var scheduleObj = {dis:$('#schedule_dis' + (counter + 1)).val(), min:$('#schedule_min' + (counter + 1)).val(), max:$('#schedule_max' + (counter + 1)).val(), add:$('#schedule_add' + (counter + 1)).val()};
+					schedule[counter] = scheduleObj;
+					
+				}
+				counter += 1;
+			});
+				
+		
+		    var highlighted = "false";
+		   	if ($('#auction_highlighted').is(":checked"))
+			{
+			  highlighted = "true";
+			}
+		
+			<MvASSIGN NAME="l.product_url" VALUE="{ g.Domain:MM_URL $ 'SCREEN=PROD&Store_Code=' $ g.Store_Code $ '&Product_Code=' $ g.Product_Code }">
+			
+			var obj = {auction:{
+				auction_id: $('#auction_id').val(), 
+				product_name: $('#product_name').val(),  
+				product_id: $('#product_id').val(),
+				product_category: $('#AYM_category').val(),
+				product_descr: $('#product_descr').val(),
+				product_image: $('#product_image').val(),
+				product_link: '<MvEVAL EXPR="{ l.product_url }">',
+				merchant_id: '<MvEVAL EXPR="{l.merchant_id}">',
+				pricing_conflict: $('#auction_priceconflict').val(),
+				auction_ended:"",
+				merchant_website:'<MvEVAL EXPR="{l.merchant_website}">',
+				auction_highlighted: highlighted,
+				merchant_name:'<MvEVAL EXPR="{l.merchant_name}">',
+				auction_maxunits:$('#auction_maxunits').val(),
+				auction_end: $('#auction_end').val(),
+				auction_deleted:"",
+				auction_startprice: $('#auction_startprice').val(),
+				auction_start: $('#auction_start').val(),
+				rebate_sent: "0",
+				auction_cleared: "0",
+				auction_schedule:{schedule_row: schedule },
+			}};
+			
+			
+		    var auctionDef = $.JSON.encode(obj);
+		    auctionDef = encodeURIComponent(auctionDef);
+			//alert (auctionDef);
+					
+			<MvCOMMENT>
+				Server call: http://www.ayopadev.com/ayopa/json.php?
+			</MvCOMMENT>
+		   
+		  
+		   var url = "http://beta.ayopasoft.com/AyopaServer/create-auction?auctionDef=" + auctionDef;
+
+		    $.getJSON(url + "&jsoncallback=?", function(data){
+		    
+			Auction = data.auction_id;
+		    
+		    if(Auction != "" && Auction != null)
+		    {
+		     jQuery("#auction_id").val(Auction);
+		     SubmitForm( 'PROD', 'UPRD' );
+		    }
+		    else
+		    {
+		     
+			 	alert (data.error);
+		    }
+
+		   })
+
+		   return false;
+
+		  });
+		 });
+		</script>
+	    
+	    <div id="hidefields" style="display:none">
+	
+		<div style="float:right; width:250px;margin-right:50px">
+		  <table width="100%" align="right">
+			<tr><td nowrap>
+				Auction Max Units:
+				</td>
+				<td width="100%">
+				<input type="text" size=10 name="AYM_Data[7]"   id = "auction_maxunits" value="" class="required digits">	</td>
+			</tr>
+			
+			<tr><td nowrap>
+				Auction Start Price:
+				</td>
+				<td width="100%">
+				<input type="text" size=10 name="AYM_Data[8]"   id = "auction_startprice" value="" class="required number">	</td>
+			</tr>
+		
+			<tr><td nowrap>
+				Auction Price Conflict:
+				</td>
+				<td width="100%">
+				<input type="text" size=10 name="AYM_Data[9]"   id = "auction_priceconflict" value="" class="required number">	</td>
+			</tr>
+			</table>
+			<br /><br />
+			<p>&nbsp;</p>
+			<input type="hidden" id="sched_id" value="1">
+			<b>Auction Schedule</b> <a href="#" id="add_btn" onClick="addFormField(); return false;">[+] Add</a> <a href="#" id="rem_btn" onClick="remFormField(); return false;">[-] Remove</a>
+			<table border=0 cellpadding=0 cellspacing=5 width="100%" id="table_sched">
+			<thead>
+			<tr>
+			    <th></th>
+				<th>Discount</th>
+				<th>Min Qty</th>
+				<th>Max Qty</th>
+				<th>Add'l Disc</th>
+			</tr>
+			</thead>
+			<tbody>
+							
+			</tbody>
+			</table>
+		</div>
+	
+		<table border=0 cellpadding=0 cellspacing=5 width="50%">
+		<MvASSIGN NAME = "l.pos"			VALUE = 1>
+		<MvASSIGN NAME = "l.field_count"	VALUE = "{ miva_array_elements( g.AYM_Fields ) }">
+		
+	
+		
+		<MvWHILE EXPR = "{ l.pos LE l.field_count }">
+			<tr><td nowrap>
+				<MvEVAL EXPR = "{ encodeentities( g.AYM_Fields[ l.pos ]:name ) }">:
+			</td><td width="100%">
+		
+					<MvCOMMENT>
+					<MvIF EXPR = "{ g.AYM_Fields[ l.pos ]:code EQ 'product_id' }">
+						<input type="hidden" size=25 name="{ 'AYM_Fields[' $ l.pos $ ']:value' }"  id = "{ l.pos }" value="{ encodeentities( l.product:id ) }"><MvEval EXPR = "{ encodeentities( l.product:id ) }">
+					<MvELSEIF EXPR = "{ g.AYM_Fields[ l.pos ]:code EQ 'product_image' }">
+						<input type="hidden" size=25 name="{ 'AYM_Fields[' $ l.pos $ ']:value' }"   id = "{ l.pos }" value="{ encodeentities( g.Domain:BASE_URL $ l.product:thumbnail ) }"><img src="{ encodeentities(g.Domain:BASE_URL $ l.product:thumbnail) }" width="100px">
+					<MvELSEIF EXPR = "{ g.AYM_Fields[ l.pos ]:code EQ 'auction_id' }">
+						<input type="hidden" size=25 name="{ 'AYM_Fields[' $ l.pos $ ']:value' }"   id = "{ l.pos }" value="{ encodeentities( g.AYM_Fields[ l.pos ]:value ) }"><MvEval EXPR = "{ encodeentities( g.AYM_Fields[ l.pos ]:value ) }">
+					<MvELSEIF EXPR = "{ g.AYM_Fields[ l.pos ]:code EQ 'auction_start' }">
+						<input type="text" size=25 name="{ 'AYM_Fields[' $ l.pos $ ']:value' }"   id = "auction_start" value="{ encodeentities( g.AYM_Fields[ l.pos ]:value ) }">
+					<MvELSEIF EXPR = "{ g.AYM_Fields[ l.pos ]:code EQ 'auction_end' }">
+						<input type="text" size=25 name="{ 'AYM_Fields[' $ l.pos $ ']:value' }"   id = "auction_end" value="{ encodeentities( g.AYM_Fields[ l.pos ]:value ) }">
+					<MvELSEIF EXPR = "{ g.AYM_Fields[ l.pos ]:code EQ 'prod_name' }">
+						<input type="text" size=25 name="{ 'AYM_Fields[' $ l.pos $ ']:value' }"  id = "{ l.pos }" value="{ encodeentities( l.product:name ) }">
+					<MvELSEIF EXPR = "{ g.AYM_Fields[ l.pos ]:code EQ 'prod_descr' }">
+						<textarea rows="10" cols="28" name="{ 'AYM_Fields[' $ l.pos $ ']:value' }"  id = "{ l.pos }"><MvEVAL EXPR="{ encodeentities( l.product:descrip ) }"></textarea>
+					<MvELSE>
+						<input type="text" size=25 name="{ 'AYM_Fields[' $ l.pos $ ']:value' }"  id = "{ l.pos }" value="{ encodeentities( g.AYM_Fields[ l.pos ]:value ) }">
+					</MvIF>
+					</MvCOMMENT>
+					
+					<MvIF EXPR = "{ g.AYM_Fields[ l.pos ]:code EQ 'auction_id' }">
+						<input type="hidden" size=25 name="{ 'AYM_Fields[' $ l.pos $ ']:value' }"   id = "auction_id" value="{ encodeentities( g.AYM_Fields[ l.pos ]:value ) }"><MvEval EXPR = "{ encodeentities( g.AYM_Fields[ l.pos ]:value ) }">
+					</MvIF>
+					
+			</td></tr>
+
+			<input type="hidden" name="{ 'AYM_Fields[' $ l.pos $ ']:id' }"		value="{ encodeentities( g.AYM_Fields[ l.pos ]:id ) }">
+			<input type="hidden" name="{ 'AYM_Fields[' $ l.pos $ ']:name' }"	value="{ encodeentities( g.AYM_Fields[ l.pos ]:name ) }">
+			<input type="hidden" name="{ 'AYM_Fields[' $ l.pos $ ']:code' }"	value="{ encodeentities( g.AYM_Fields[ l.pos ]:code ) }">
+			
+			<input type="hidden" name="merchant_url" id ="merchant_url" value="{g.Domain}">
+
+			<MvASSIGN NAME = "l.pos"	VALUE = "{ l.pos + 1 }">
+		</MvWHILE>
+		
+		<tr><td nowrap>
+			Product ID:
+			</td>
+			<td width="100%">
+				<input type="hidden" size="27" name="AYM_Data[1]" id="product_id" value="{ encodeentities( l.product:id ) }"><MvEval EXPR = "{ encodeentities( l.product:id ) }">
+			</td>
+		</tr>
+		
+		<tr><td nowrap>
+			Product Name:
+			</td>
+			<td width="100%">
+				<input type="text" size="27" name="AYM_Data[2]" id="product_name" class="required" value="{ encodeentities( l.product:name ) }">
+			</td>
+		</tr>
+		
+		<tr><td nowrap>
+			Product Description:
+			</td>
+			<td width="100%">
+				<textarea rows="10" cols="28" name="AYM_Data[3]"  id = "product_descr" class="required"><MvEVAL EXPR="{ encodeentities( l.product:descrip ) }"></textarea>
+			</td>
+		</tr>
+		
+		<MvASSIGN NAME = "l.pos"			VALUE = 1>
+		<MvASSIGN NAME = "l.category_count"	VALUE = "{ miva_array_elements( g.AYM_Categories ) }">
+		<tr>
+		<td nowrap>
+			Ayopa Category:
+		</td>
+		<td width="100%">
+		<select name="AYM_category" id="AYM_category">
+		<MvWHILE EXPR = "{ l.pos LE l.category_count }">
+						
+				<option value="{ g.AYM_Categories[ l.pos ] }"><MvEVAL EXPR="{ g.AYM_Categories[ l.pos ]  }"></option>
+					
+			<MvASSIGN NAME = "l.pos"	VALUE = "{ l.pos + 1 }">
+		</MvWHILE>
+		</select>
+		<MvHIDE FIELDS = "g.AYM_Categories">
+		</td></tr>
+		
+		<tr><td nowrap>
+			Auction Start:
+			</td>
+			<td width="100%">
+			<input type="text" size=27 name="AYM_Data[4]"   id = "auction_start" value="" class="required">	</td>
+		</tr>
+		
+		<tr><td nowrap>
+			Auction End:
+			</td>
+			<td width="100%">
+				<input type="text" size=27 name="AYM_Data[5]"   id = "auction_end" value="" class="required">
+			</td>
+		</tr>
+		<tr><td nowrap>
+			Highlighted:
+			</td>
+			<td width="100%">
+			<input type="checkbox" name="AYM_Data[10]"   id = "auction_highlighted" value="true"> 	</td>
+		</tr>
+		<tr><td nowrap>
+			Product Image:
+			</td>
+			<td width="100%">
+				<MvIF EXPR="{('http://' IN l.product:thumbnail) EQ 0}">
+					<input type="hidden" size=25 name="AYM_Data[6]"   id = "product_image" value="{ encodeentities( g.Domain:BASE_URL $ l.product:thumbnail ) }"><img src="{ encodeentities(g.Domain:BASE_URL $ l.product:thumbnail) }" width="100px">
+				<MvELSE>
+					<input type="hidden" size=25 name="AYM_Data[6]"   id = "product_image" value="{ encodeentities( l.product:thumbnail ) }"><img src="{ encodeentities(l.product:thumbnail) }" width="100px">
+				</MvIF>
+			</td>
+		</tr>
+		</table>
+		
+				<div style="float:right;margin-right:30px;">
+					<input name="auction_submit" type="button" id="btn" name="btn" value="Save GroupBuy">
+				</div>
+				<div style="float:right;margin-right:30px;">
+					<input name="auction_end" type="button" id="btn_end_auction" name="btn_end_auction" value="End GroupBuy">
+				</div>
+				<div id="response">
+				</div>	
+		
+		</div> <!--end hide fields-->
+		<div id="create_auction">
+				<input name="auction_new" type="button" id="btn_new_auction" value="New Auction">
+		</div>
+	<MvELSE>
+		<MvHIDE FIELDS = "g.AYM_Fields">
+		<MvHIDE FIELDS = "g.AYM_Categories">
+	</MvIF>
+
+	<MvFUNCTIONRETURN VALUE = 1>
+</MvFUNCTION>
+
+<MvFUNCTION NAME = "Module_Product_Validate" PARAMETERS = "module var" STANDARDOUTPUTLEVEL = "">
+	<MvASSIGN NAME = "l.pos"			VALUE = 1>
+	<MvASSIGN NAME = "l.field_count"	VALUE = "{ miva_array_elements( g.AYM_Fields ) }">
+
+	<MvWHILE EXPR = "{ l.pos LE l.field_count }">
+		<MvASSIGN NAME = "g.AYM_Fields" INDEX = "{ l.pos }" MEMBER = "value"	VALUE = "{ trim( g.AYM_Fields[ l.pos ]:value ) }">
+		<MvASSIGN NAME = "l.pos"	VALUE = "{ l.pos + 1 }">
+	</MvWHILE>
+
+	<MvFUNCTIONRETURN VALUE = 1>
+</MvFUNCTION>
+
+<MvFUNCTION NAME = "Module_Product_Insert" PARAMETERS = "module var, product var" STANDARDOUTPUTLEVEL = "">
+	<MvASSIGN NAME = "l.pos"			VALUE = 1>
+	<MvASSIGN NAME = "l.field_count"	VALUE = "{ miva_array_elements( g.AYM_Fields ) }">
+
+	<MvWHILE EXPR = "{ l.pos LE l.field_count }">
+		<MvIF EXPR = "{ len( g.AYM_Fields[ l.pos ]:value ) }">
+			<MvIF EXPR = "{ NOT ProductFieldValue_Set( g.AYM_Fields[ l.pos ]:id, l.product:id, g.AYM_Fields[ l.pos ]:value ) }">
+				<MvFUNCTIONRETURN VALUE = 0>
+			</MvIF>
+
+			
+		</MvIF>
+
+		<MvASSIGN NAME = "l.pos"	VALUE = "{ l.pos + 1 }">
+	</MvWHILE>
+
+	<MvFUNCTIONRETURN VALUE = 1>
+</MvFUNCTION>
+
+<MvFUNCTION NAME = "Module_Product_Update" PARAMETERS = "module var, product var" STANDARDOUTPUTLEVEL = "">
+	<MvASSIGN NAME = "l.pos"			VALUE = 1>
+	<MvASSIGN NAME = "l.field_count"	VALUE = "{ miva_array_elements( g.AYM_Fields ) }">
+
+	<MvWHILE EXPR = "{ l.pos LE l.field_count }">
+		<MvIF EXPR = "{ len( g.AYM_Fields[ l.pos ]:value ) }">
+			<MvIF EXPR = "{ NOT ProductFieldValue_Set( g.AYM_Fields[ l.pos ]:id, l.product:id, g.AYM_Fields[ l.pos ]:value ) }">
+				<MvFUNCTIONRETURN VALUE = 0>
+			</MvIF>
+
+			<MvELSE>
+			<MvIF EXPR = "{ NOT ProductFieldValue_Delete( g.AYM_Fields[ l.pos ]:id, l.product:id ) }">
+				<MvFUNCTIONRETURN VALUE = 0>
+			</MvIF>
+
+		</MvIF>
+
+		<MvASSIGN NAME = "l.pos"	VALUE = "{ l.pos + 1 }">
+	</MvWHILE>
+
+	<MvFUNCTIONRETURN VALUE = 1>
+</MvFUNCTION>
+
+<MvFUNCTION NAME = "Module_Product_Delete" PARAMETERS = "module var, product var" STANDARDOUTPUTLEVEL = "">
+	<MvIF EXPR = "{ NOT ProductFieldValue_Delete_All_Product( l.product:id ) }">
+		<MvFUNCTIONRETURN VALUE = 0>
+	</MvIF>
+
+	
+
+	<MvFUNCTIONRETURN VALUE = 1>
+</MvFUNCTION>
+
+<MvFUNCTION NAME = "Module_Product_BatchEdit_Validate" PARAMETERS = "module var" STANDARDOUTPUTLEVEL = "">
+	<MvFUNCTIONRETURN VALUE = 1>
+</MvFUNCTION>
+
+<MvFUNCTION NAME = "Module_Product_BatchEdit_Update" PARAMETERS = "module var, product var" STANDARDOUTPUTLEVEL = "">
+	<MvFUNCTIONRETURN VALUE = 1>
+</MvFUNCTION>
+
+<MvFUNCTION NAME = "Module_Product_BatchEdit_Delete" PARAMETERS = "module var, product var" STANDARDOUTPUTLEVEL = "">
+	<MvIF EXPR = "{ NOT ProductFieldValue_Delete_All_Product( l.product:id ) }">
+		<MvFUNCTIONRETURN VALUE = 0>
+	</MvIF>
+
+	
+	<MvFUNCTIONRETURN VALUE = 1>
+</MvFUNCTION>
+
+<MvFUNCTION NAME = "Module_Product_Fields" PARAMETERS = "module var, fields var" STANDARDOUTPUTLEVEL = "">
+	<MvFUNCTIONRETURN VALUE = "{ ProductFieldList_Load_All( l.fields ) }">
+</MvFUNCTION>
+
+<MvFUNCTION NAME = "Module_Product_Field_Name" PARAMETERS = "module var, code" STANDARDOUTPUTLEVEL = "">
+	<MvIF EXPR = "{ ProductField_Load_Code( l.code, l.field ) }">
+		<MvFUNCTIONRETURN VALUE = "{ l.field:name }">
+	</MvIF>
+
+	<MvFUNCTIONRETURN VALUE = "">
+</MvFUNCTION>
+
+<MvFUNCTION NAME = "Module_Product_Field_Value" PARAMETERS = "module var, product_id, code" STANDARDOUTPUTLEVEL = "">
+	<MvIF EXPR = "{ g.ProductFieldCache:product_id NE l.product_id }">
+		<MvASSIGN NAME = "g.ProductFieldCache:product_id"	VALUE = "{ l.product_id }">
+		<MvASSIGN NAME = "g.ProductFieldCache:fields"		VALUE = "">
+
+		<MvIF EXPR = "{ NOT ProductFieldValue_LoadAll_Cache( l.product_id, g.ProductFieldCache:fields ) }">
+			<MvFUNCTIONRETURN VALUE = "">
+		</MvIF>
+	</MvIF>
+
+	<MvREFERENCEARRAY NAME = "l.field" VARIABLE = "g.ProductFieldCache:fields">
+		<MvMEMBER NAME = "{ l.code }">
+	</MvREFERENCEARRAY>
+
+	<MvFUNCTIONRETURN VALUE = "{ l.field }">
+</MvFUNCTION>
+
+<MvFUNCTION NAME = "Module_Product_Set_Field" PARAMETERS = "module var, product_id, code, value" STANDARDOUTPUTLEVEL = "">
+	<MvIF EXPR = "{ NOT ProductField_Load_Code( l.code, l.field ) }">
+		<MvFUNCTIONRETURN VALUE = 0>
+	</MvIF>
+
+	<MvIF EXPR = "{ len( l.value ) }">
+		<MvIF EXPR = "{ NOT ProductFieldValue_Set( l.field:id, l.product_id, l.value ) }">
+			<MvFUNCTIONRETURN VALUE = 0>
+		</MvIF>
+
+	<MvELSE>
+		<MvIF EXPR = "{ NOT ProductFieldValue_Delete( l.field:id, l.product_id ) }">
+			<MvFUNCTIONRETURN VALUE = 0>
+		</MvIF>
+
+		</MvIF>
+
+	<MvCOMMENT>
+	|
+	| Update in-memory cache, if neccessary
+	|
+	</MvCOMMENT>
+
+	<MvIF EXPR = "{ g.ProductFieldCache:product_id EQ l.product_id }">
+		<MvASSIGNARRAY NAME = "g.ProductFieldCache:fields" VALUE = "{ l.value }">
+			<MvMEMBER NAME = "{ l.code }">
+		</MvASSIGNARRAY>
+	</MvIF>
+
+	<MvFUNCTIONRETURN VALUE = 1>
+</MvFUNCTION>
+
+<MvFUNCTION NAME = "Module_Utility_Validate" PARAMETERS = "module var" STANDARDOUTPUTLEVEL = "">
+	
+
+	<MvCOMMENT>
+	|
+	| Product Fields
+	|
+	
+
+	<MvIF EXPR = "{ g.CFM_ProductField_Add OR len( g.CFM_ProductField_Edit ) }">
+		<MvASSIGN NAME = "g.CFM_ProductField:code" 	VALUE = "{ trim( g.CFM_ProductField:code ) }">
+		<MvASSIGN NAME = "g.CFM_ProductField:name" 	VALUE = "{ trim( g.CFM_ProductField:name ) }">
+
+		<MvIF EXPR = "{ NOT [ g.Module_Admin ].Validate_Code( g.CFM_ProductField:code ) }">
+			<MvFUNCTIONRETURN VALUE = "{ [ g.Module_Admin ].FieldError( 'AYMP', 'CFM_ProductField:code', g.Validation_Message ) }">
+		</MvIF>
+
+		<MvIF EXPR = "{ ( len( g.CFM_ProductField_Edit ) EQ 0 ) OR ( toupper( g.CFM_ProductField_Edit ) NE toupper( g.CFM_ProductField:code ) ) }">
+			<MvIF EXPR = "{ ProductField_Load_Code( g.CFM_ProductField:code, l.field ) }">
+				<MvFUNCTIONRETURN VALUE = "{ [ g.Module_Admin ].FieldError( 'AYMP', 'CFM_ProductField:code', 'A field with the code ' $ g.CFM_ProductField:code $ ' already exists' ) }">
+			</MvIF>
+		</MvIF>
+
+		<MvIF EXPR = "{ len( g.CFM_ProductField:name ) EQ 0 }">
+			<MvFUNCTIONRETURN VALUE = "{ [ g.Module_Admin ].FieldError( 'AYMP', 'CFM_ProductField:name', 'Please specify a field name' ) }">
+		</MvIF>
+	</MvIF>
+	</MvCOMMENT>
+	
+	<MvFUNCTIONRETURN VALUE = 1>
+</MvFUNCTION>
+
+<MvFUNCTION NAME = "Module_Utility_Update" PARAMETERS = "module var" STANDARDOUTPUTLEVEL = "">
+	
+
+	<MvASSIGN NAME = "l.pos"			VALUE = 1>
+	<MvASSIGN NAME = "l.field_count"	VALUE = "{ miva_array_elements( g.AYM_UtilityFields ) }">
+
+	
+		<MvIF EXPR = "{ len( g.AYM_UtilityFields:username) }">
+			<MvIF EXPR = "{ NOT UtilityFieldValue_Set( g.AYM_UtilityFields:username, g.AYM_UtilityFields:password ) }">
+				<MvFUNCTIONRETURN VALUE = 0>
+			</MvIF>
+
+		<MvELSE>
+			<MvIF EXPR = "{ NOT UtilityFieldValue_Delete( g.AYM_UtilityFields:username ) }">
+				<MvFUNCTIONRETURN VALUE = 0>
+			</MvIF>
+
+		</MvIF>
+
+
+	<MvFUNCTIONRETURN VALUE = 1>
+</MvFUNCTION>
+
+<MvFUNCTION NAME = "Module_Utility_Tabs" PARAMETERS = "module var" STANDARDOUTPUTLEVEL = "">
+	<MvFUNCTIONRETURN VALUE = "AYMP:Ayopa">
+</MvFUNCTION>
+
+<MvFUNCTION NAME = "Module_Utility_Content" PARAMETERS = "module var, tab, load_fields" STANDARDOUTPUTLEVEL = "text, html, compresswhitespace">
+	
+
+	<MvCOMMENT>
+	|
+	| Product Fields
+	|
+	</MvCOMMENT>
+	
+	
+		<MvASSIGN NAME = "g.AYM_UtilityFields"	VALUE = "">
+			<MvASSIGN NAME = "g.AYM_UtilityField_Count"	VALUE = "{ UtilityFieldList_Load_Values( g.AYM_UtilityFields ) }">		
+	
+
+	<MvIF EXPR = "{ l.tab EQ 'AYMP' }">
+		<MvHIDE FIELDS = "g.AYM_UtilityFields">
+	<table cellpadding="0" cellspacing="0" border="0">
+		<tr>
+				<td>
+					Ayopa Email: 
+				</td>
+				<td>
+					<input type="text" name="AYM_UtilityFields:username" size="40" value="{ g.AYM_UtilityFields[1]:username }">
+						
+				</td>
+		</tr>
+		<tr>
+				<td>
+					Ayopa Password:
+				</td>
+				<td>
+					<input type="password" name="AYM_UtilityFields:password" size="40" value="">
+						
+				</td>
+		</tr>
+	
+	</table>
+		
+	<MvComment>
+		<script language="JavaScript">
+<!--
+function CFM_ProductField_Add( add )
+{
+	if ( CheckModified() )
+	{
+		document.forms[ Screen ].elements[ 'CFM_ProductField_Add' ].value = add;
+		document.forms[ Screen ].elements[ 'CFM_ProductField_Edit' ].value = '';
+		document.forms[ Screen ].elements[ 'Action' ].value = '';
+		document.forms[ Screen ].elements[ 'Have_Fields' ].value = 1;
+		document.forms[ Screen ].submit();
+	}
+}
+
+function CFM_ProductField_Edit( field )
+{
+	if ( CheckModified() )
+	{
+		document.forms[ Screen ].elements[ 'CFM_ProductField_Add' ].value = 0;
+		document.forms[ Screen ].elements[ 'CFM_ProductField_Edit' ].value = field;
+		document.forms[ Screen ].elements[ 'Action' ].value = '';
+		document.forms[ Screen ].elements[ 'Have_Fields' ].value = 1;
+		document.forms[ Screen ].submit();
+	}
+}
+//-->
+		</script>
+
+		<input type="hidden" name="CFM_ProductField_Add" value="{ encodeentities( g.CFM_ProductField_Add ) }">
+		<input type="hidden" name="CFM_ProductField_Edit" value="{ encodeentities( g.CFM_ProductField_Edit ) }">
+
+		<table width="100%"  border="0" cellpadding="0" cellspacing="0" class="tabledetails">
+		<tr><td>
+		<table border=0 cellpadding=2 cellspacing=0 width="100%">
+		<tr>
+
+		<MvIF EXPR = "{ ( NOT g.CFM_ProductField_Add ) AND
+						( len( g.CFM_ProductField_Edit ) EQ 0 ) }">
+			<td align="left" valign="middle" class="be_header">
+				Remove
+			</td>
+		</MvIF>
+
+		<td align="left" valign="middle" class="be_header">
+			Code
+		</td><td align="left" valign="middle" class="be_header" width="100%">
+			Name
+		</td><td align="right" valign="middle" class="be_header" nowrap>
+			<MvIF EXPR = "{ g.CFM_ProductField_Add }">
+				<a href="JavaScript:CFM_ProductField_Add( 0 );"><MvEVAL EXPR = "{ [ g.Module_Admin ].DrawImgButton_Add( 1 ) }"></a>
+			<MvELSE>
+				<a href="JavaScript:CFM_ProductField_Add( 1 );"><MvEVAL EXPR = "{ [ g.Module_Admin ].DrawImgButton_Add( 0 ) }"></a>
+			</MvIF>
+		</td></tr>
+
+		<MvASSIGN NAME = "l.shown" VALUE = 0>
+
+		<MvASSIGN NAME = "l.field_pos"		VALUE = 1>
+		<MvASSIGN NAME = "l.field_count"	VALUE = "{ ProductFieldList_Load_All( l.fields ) }">
+
+		<MvWHILE EXPR = "{ l.field_pos LE l.field_count }">
+			<MvASSIGN NAME = "l.shown" VALUE = "{ l.shown + 1 }">
+			<MvIF EXPR = "{ ( l.shown MOD 2 ) EQ 0 }">
+				<MvASSIGN NAME = "l.class" VALUE = "be_row_alt">
+			<MvELSE>
+				<MvASSIGN NAME = "l.class" VALUE = "be_row">
+			</MvIF>
+
+			<MvIF EXPR = "{ ( NOT g.CFM_ProductField_Add ) AND
+							( len( g.CFM_ProductField_Edit ) NE 0 ) AND
+							( g.CFM_ProductField_Edit EQ l.fields[ l.field_pos ]:code ) }">
+				<MvIF EXPR = "{ NOT g.Data_Entry_Error }">
+					<MvASSIGN NAME = "g.CFM_ProductField:code" 	VALUE = "{ l.fields[ l.field_pos ]:code }">
+					<MvASSIGN NAME = "g.CFM_ProductField:name" 	VALUE = "{ l.fields[ l.field_pos ]:name }">
+				</MvIF>
+
+				<tr><td align="left" valign="middle" class="{ l.class }">
+					<input type="text" size=20 name="CFM_ProductField:code" value="{ encodeentities( g.CFM_ProductField:code ) }" onchange="SetModified();">
+				</td><td align="left" valign="middle" class="{ l.class }">
+					<input type="text" size=40 name="CFM_ProductField:name" value="{ encodeentities( g.CFM_ProductField:name ) }" onchange="SetModified();">
+				</td><td align="right" valign="middle" class="{ l.class }" nowrap>
+					<a href="{ 'JavaScript:CFM_ProductField_Edit( \'\' );' }"> <MvEVAL EXPR = "{ [ g.Module_Admin ].DrawImgButton_EditHere( 1 ) }"></a>
+				</td></tr>
+			<MvELSE>
+				<tr>
+
+				<MvIF EXPR = "{ ( NOT g.CFM_ProductField_Add ) AND
+								( len( g.CFM_ProductField_Edit ) EQ 0 ) }">
+					<td align="center" valign="middle" nowrap class="{ l.class }">
+						<input type="checkbox" name="{ 'CFM_ProductField_Remove[' $ l.shown $ ']' }" value="{ encodeentities( l.fields[ l.field_pos ]:id ) }" onclick="SetModified();">
+					</td>
+				</MvIF>
+
+				<td align="left" valign="middle" nowrap class="{ l.class }">
+					<MvEVAL EXPR = "{ encodeentities( l.fields[ l.field_pos ]:code ) }">
+				</td><td align="left" valign="middle" nowrap class="{ l.class }">
+					<MvEVAL EXPR = "{ encodeentities( l.fields[ l.field_pos ]:name ) }">
+				</td><td align="right" valign="middle" class="{ l.class }" nowrap>
+					<a href="{ 'JavaScript:CFM_ProductField_Edit( \'' $ [ g.Module_Admin ].JavaScriptEncode( l.fields[ l.field_pos ]:code ) $ '\' );' }"><MvEVAL EXPR = "{ [ g.Module_Admin ].DrawImgButton_EditHere( 0 ) }"></a>
+				</td></tr>
+			</MvIF>
+
+			<MvASSIGN NAME = "l.field_pos"	VALUE = "{ l.field_pos + 1 }">
+		</MvWHILE>
+
+		<MvIF EXPR = "{ g.CFM_ProductField_Add }">
+			<MvIF EXPR = "{ ( l.shown MOD 2 ) EQ 0 }">
+				<MvASSIGN NAME = "l.class" VALUE = "be_row">
+			<MvELSE>
+				<MvASSIGN NAME = "l.class" VALUE = "be_row_alt">
+			</MvIF>
+
+			<MvIF EXPR = "{ NOT g.Data_Entry_Error }">
+				<MvASSIGN NAME = "g.CFM_ProductField:code" 	VALUE = "">
+				<MvASSIGN NAME = "g.CFM_ProductField:name" 	VALUE = "">
+			</MvIF>
+
+			<tr><td align="left" valign="middle" class="{ l.class }">
+				<input type="text" size=20 name="CFM_ProductField:code" value="{ encodeentities( g.CFM_ProductField:code ) }" onchange="SetModified();">
+			</td><td align="left" valign="middle" class="{ l.class }">
+				<input type="text" size=40 name="CFM_ProductField:name" value="{ encodeentities( g.CFM_ProductField:name ) }" onchange="SetModified();">
+			</td><td align="left" valign="middle" class="{ l.class }">
+				&nbsp;
+			</td></tr>
+		</MvIF>
+		</table>
+		</td></tr>
+		</table>
+
+		<input type="hidden" name="CFM_ProductField_Count" value="{ encodeentities( l.shown ) }">
+	<MvELSE>
+		<input type="hidden" name="CFM_ProductField_Count" value=0>
+		
+		
+	</MvComment>	
+	
+	<MvELSE>
+		<MvHIDE FIELDS = "g.AYM_UtilityFields">
+	</MvIF>
+    
+
+	<MvFUNCTIONRETURN VALUE = 1>
+</MvFUNCTION>
+
+<MvFUNCTION NAME = "StoreUtilityModule_Validate" PARAMETERS = "module var" STANDARDOUTPUTLEVEL = "">
+	<MvFUNCTIONRETURN VALUE = 1>
+</MvFUNCTION>
+
+<MvFUNCTION NAME = "StoreUtilityModule_Action" PARAMETERS = "module var" STANDARDOUTPUTLEVEL = "">
+	<MvFUNCTIONRETURN VALUE = 1>
+</MvFUNCTION>
+
+<MvFUNCTION NAME = "StoreUtilityModule_Screen" PARAMETERS = "module var" STANDARDOUTPUTLEVEL = "">
+	<MvFUNCTIONRETURN VALUE = 1>
+</MvFUNCTION>
+
+<MvFUNCTION NAME = "StoreUtilityModule_LeftNavigation"  PARAMETERS = "module var, indent" STANDARDOUTPUTLEVEL = "">
+	<MvFUNCTIONRETURN VALUE = 1>
+</MvFUNCTION>
+
+<MvFUNCTION NAME = "Module_Provision_Store" PARAMETERS = "module var, provide_xml var" STANDARDOUTPUTLEVEL = "">
+	<MvASSIGN NAME = "l.child_pos"		VALUE = 1>
+	<MvASSIGN NAME = "l.child_count"	VALUE = "{ miva_array_elements( l.provide_xml:children ) }">
+	<MvWHILE EXPR = "{ l.child_pos LE l.child_count }">
+		<MvASSIGN NAME = "l.name"		VALUE = "{ tolower( l.provide_xml:children[ l.child_pos ]:name ) }">
+
+		<MvIF EXPR = "{ l.name EQ 'productfield_add' }">			<MvEVAL EXPR = "{ Module_Provision_Store_ProductField_Add( l.module, l.provide_xml:children[ l.child_pos ] ) }">
+		<MvELSEIF EXPR = "{ l.name EQ 'productfield_update' }">		<MvEVAL EXPR = "{ Module_Provision_Store_ProductField_Update( l.module, l.provide_xml:children[ l.child_pos ] ) }">
+		<MvELSEIF EXPR = "{ l.name EQ 'productfield_delete' }">		<MvEVAL EXPR = "{ Module_Provision_Store_ProductField_Delete( l.module, l.provide_xml:children[ l.child_pos ] ) }">
+		<MvELSEIF EXPR = "{ l.name EQ 'productfield_value' }">		<MvEVAL EXPR = "{ Module_Provision_Store_ProductField_Value( l.module, l.provide_xml:children[ l.child_pos ] ) }">
+			</MvIF>
+
+		<MvASSIGN NAME = "l.child_pos"	VALUE = "{ l.child_pos + 1 }">
+	</MvWHILE>
+</MvFUNCTION>
+
+<MvFUNCTION NAME = "Module_Provision_Store_ProductField_Add" PARAMETERS = "module var, provide_xml var" STANDARDOUTPUTLEVEL = "">
+	<MvIF EXPR = "{ NOT [ g.Module_Feature_PRV_AD ].PRV_Tag_Text( 'R', l.provide_xml,	'Code',	l.field:code ) OR
+					NOT [ g.Module_Feature_PRV_AD ].PRV_Tag_Text( 'R', l.provide_xml,	'Name',	l.field:name ) }">
+		<MvFUNCTIONRETURN>
+	</MvIF>
+
+	<MvIF EXPR = "{ ProductField_Load_Code( l.field:code, l.null ) }">
+		<MvFUNCTIONRETURN VALUE = "{ [ g.Module_Feature_PRV_AD ].PRV_LogMessage( l.provide_xml, 'A product field with the code \'' $ l.field:code $ '\' already exists' ) }">
+	</MvIF>
+
+	<MvIF EXPR = "{ NOT ProductField_Insert( l.field ) }">
+		<MvFUNCTIONRETURN VALUE = "{ [ g.Module_Feature_PRV_AD ].PRV_LogError( l.provide_xml ) }">
+	</MvIF>
+
+</MvFUNCTION>
+
+<MvFUNCTION NAME = "Module_Provision_Store_ProductField_Update" PARAMETERS = "module var, provide_xml var" STANDARDOUTPUTLEVEL = "">
+	<MvIF EXPR = "{ NOT [ g.Module_Feature_PRV_AD ].PRV_Attribute_Text( l.provide_xml, 'code', l.code ) }">
+		<MvFUNCTIONRETURN>
+	</MvIF>
+
+	<MvIF EXPR = "{ NOT ProductField_Load_Code( l.code, l.field ) }">
+		<MvFUNCTIONRETURN VALUE = "{ [ g.Module_Feature_PRV_AD ].PRV_LogMessage( l.provide_xml, 'Product field \'' $ l.code $ '\' not found' ) }">
+	</MvIF>
+
+	<MvIF EXPR = "{ NOT [ g.Module_Feature_PRV_AD ].PRV_Tag_Text( 'O', l.provide_xml,	'Code',	l.field:code ) OR
+					NOT [ g.Module_Feature_PRV_AD ].PRV_Tag_Text( 'O', l.provide_xml,	'Name',	l.field:name ) }">
+		<MvFUNCTIONRETURN>
+	</MvIF>
+
+	<MvIF EXPR = "{ l.field:code NE l.code }">
+		<MvIF EXPR = "{ ProductField_Load_Code( l.field:code, l.null ) }">
+			<MvFUNCTIONRETURN VALUE = "{ [ g.Module_Feature_PRV_AD ].PRV_LogMessage( l.provide_xml, 'A product field with the code \'' $ l.field:code $ '\' already exists' ) }">
+		</MvIF>
+	</MvIF>
+
+	<MvIF EXPR = "{ NOT ProductField_Update( l.field ) }">
+		<MvFUNCTIONRETURN VALUE = "{ [ g.Module_Feature_PRV_AD ].PRV_LogError( l.provide_xml ) }">
+	</MvIF>
+
+</MvFUNCTION>
+
+<MvFUNCTION NAME = "Module_Provision_Store_ProductField_Delete" PARAMETERS = "module var, provide_xml var" STANDARDOUTPUTLEVEL = "">
+	<MvIF EXPR = "{ NOT [ g.Module_Feature_PRV_AD ].PRV_Attribute_Text( l.provide_xml, 'code', l.code ) }">
+		<MvFUNCTIONRETURN>
+	</MvIF>
+
+	<MvIF EXPR = "{ NOT ProductField_Load_Code( l.code, l.field ) }">
+		<MvFUNCTIONRETURN VALUE = "{ [ g.Module_Feature_PRV_AD ].PRV_LogMessage( l.provide_xml, 'Product field \'' $ l.code $ '\' not found' ) }">
+	</MvIF>
+
+	<MvIF EXPR = "{ NOT ProductField_Delete( l.field:id ) OR
+					NOT ProductFieldValue_Delete_All_Field( l.field:id ) }">
+		<MvFUNCTIONRETURN VALUE = "{ [ g.Module_Feature_PRV_AD ].PRV_LogError( l.provide_xml ) }">
+	</MvIF>
+
+</MvFUNCTION>
+
+<MvFUNCTION NAME = "Module_Provision_Store_ProductField_Value" PARAMETERS = "module var, provide_xml var" STANDARDOUTPUTLEVEL = "">
+	<MvIF EXPR = "{ NOT [ g.Module_Feature_PRV_AD ].PRV_Attribute_Text( l.provide_xml, 'product',	l.product_code ) OR
+					NOT [ g.Module_Feature_PRV_AD ].PRV_Attribute_Text( l.provide_xml, 'field',		l.field_code ) }">
+		<MvFUNCTIONRETURN>
+	</MvIF>
+
+	<MvIF EXPR = "{ NOT [ g.Module_Library_DB ].Product_Load_Code( l.product_code, l.product ) }">
+		<MvFUNCTIONRETURN VALUE = "{ [ g.Module_Feature_PRV_AD ].PRV_LogMessage( l.provide_xml, 'Product \'' $ l.product_code $ '\' not found' ) }">
+	</MvIF>
+
+	<MvIF EXPR = "{ NOT ProductField_Load_Code( l.field_code, l.field ) }">
+		<MvFUNCTIONRETURN VALUE = "{ [ g.Module_Feature_PRV_AD ].PRV_LogMessage( l.provide_xml, 'Product field \'' $ l.field_code $ '\' not found' ) }">
+	</MvIF>
+
+	<MvIF EXPR = "{ len( l.provide_xml:value ) }">
+		<MvIF EXPR = "{ NOT ProductFieldValue_Set( l.field:id, l.product:id, l.provide_xml:value ) }">
+			<MvFUNCTIONRETURN VALUE = 0>
+		</MvIF>
+
+		<MvELSE>
+		<MvIF EXPR = "{ NOT ProductFieldValue_Delete( l.field:id, l.product:id ) }">
+			<MvFUNCTIONRETURN VALUE = 0>
+		</MvIF>
+
+	</MvIF>
+</MvFUNCTION>
+
+
+
+<MvFUNCTION NAME = "ProductField_Read" PARAMETERS = "field var" STANDARDOUTPUTLEVEL = "">
+	<MvASSIGN NAME = "l.field:id"	VALUE = "{ ProductFields.d.id }">
+	<MvASSIGN NAME = "l.field:code"	VALUE = "{ ProductFields.d.code }">
+	<MvASSIGN NAME = "l.field:name"	VALUE = "{ ProductFields.d.name }">
+</MvFUNCTION>
+
+<MvFUNCTION NAME = "ProductFields_Count" STANDARDOUTPUTLEVEL = "">
+	<MvOPENVIEW NAME	= "Merchant"
+				VIEW	= "ProductFields"
+				QUERY	= "{ 'SELECT COUNT( * ) AS field_count FROM ' $ g.Store_Table_Prefix $ 'AYM_ProdFields' }">
+	<MvIF EXPR = "{ g.MvOPENVIEW_Error }">
+		<MvFUNCTIONRETURN VALUE = "{ [ g.Module_Library_Utilities ].Error( 'MER-UTL-CST-00068', g.MvOPENVIEW_Error ) }">
+	</MvIF>
+
+	<MvIF EXPR = "{ ProductFields.d.EOF }">
+		<MvCLOSEVIEW NAME = "Merchant" VIEW = "ProductFields">
+		<MvFUNCTIONRETURN VALUE = 0>
+	</MvIF>
+
+	<MvASSIGN NAME = "l.field_count" VALUE = "{ ProductFields.d.field_count }">
+	<MvCLOSEVIEW NAME = "Merchant" VIEW = "ProductFields">
+
+	<MvFUNCTIONRETURN VALUE = "{ l.field_count }">
+</MvFUNCTION>
+
+<MvFUNCTION NAME = "ProductFieldList_Load_All" PARAMETERS = "fields var" STANDARDOUTPUTLEVEL = "">
+	<MvOPENVIEW NAME	= "Merchant"
+				VIEW	= "ProductFields"
+				QUERY	= "{ 'SELECT * FROM ' $ g.Store_Table_Prefix $ 'AYM_ProdFields ORDER BY id' }">
+	<MvIF EXPR = "{ g.MvOPENVIEW_Error }">
+		<MvFUNCTIONRETURN VALUE = "{ [ g.Module_Library_Utilities ].Error( 'MER-UTL-CST-00069', g.MvOPENVIEW_Error ) }">
+	</MvIF>
+
+	<MvASSIGN NAME = "l.field_count"		VALUE = 0>
+	<MvWHILE EXPR = "{ NOT ProductFields.d.EOF }">
+		<MvASSIGN NAME = "l.field_count"	VALUE = "{ l.field_count + 1 }">
+
+		<MvEVAL EXPR = "{ ProductField_Read( l.fields[ l.field_count ] ) }">
+		<MvSKIP NAME = "Merchant" VIEW = "ProductFields" ROWS = 1>
+	</MvWHILE>
+
+	<MvCLOSEVIEW NAME = "Merchant" VIEW = "ProductFields">
+	<MvFUNCTIONRETURN VALUE = "{ [ g.Module_Library_DB ].ListLoad_EOF_Return( 'MER-UTL-CST-00083', l.field_count ) }">
+</MvFUNCTION>
+
+<MvFUNCTION NAME = "UtilityField_Read" PARAMETERS = "field var" STANDARDOUTPUTLEVEL = "">
+	<MvASSIGN NAME = "l.field:login_id"	VALUE = "{ ProductFields.d.login_id }">
+	<MvASSIGN NAME = "l.field:username"	VALUE = "{ ProductFields.d.username }">
+	<MvASSIGN NAME = "l.field:password"	VALUE = "{ ProductFields.d.password }">
+</MvFUNCTION>
+
+<MvFUNCTION NAME = "UtilityFieldList_Load_Values" PARAMETERS = "fields var" STANDARDOUTPUTLEVEL = "">
+	<MvOPENVIEW NAME	= "Merchant"
+				VIEW	= "ProductFields"
+				QUERY	= "{ 'SELECT
+								login_id, username, password
+							  FROM ' $
+								g.Store_Table_Prefix $ 'AYM_Login LIMIT 1' }"	>
+							
+	<MvIF EXPR = "{ g.MvOPENVIEW_Error }">
+		<MvFUNCTIONRETURN VALUE = "{ [ g.Module_Library_Utilities ].Error( 'MER-UTL-CST-00070', g.MvOPENVIEW_Error ) }">
+	</MvIF>
+
+	<MvASSIGN NAME = "l.field_count"		VALUE = 0>
+
+	<MvWHILE EXPR = "{ NOT ProductFields.d.EOF }">
+		<MvASSIGN NAME = "l.field_count"	VALUE = "{ l.field_count + 1 }">
+
+		<MvEVAL EXPR = "{ UtilityField_Read( l.fields[ l.field_count ] ) }">
+		<MvASSIGN NAME = "l.fields" INDEX = "{ l.field_count }" MEMBER = "login_id"	VALUE = "{ ProductFields.d.login_id }">
+		<MvASSIGN NAME = "l.fields" INDEX = "{ l.field_count }" MEMBER = "username"	VALUE = "{ ProductFields.d.username }">
+		<MvASSIGN NAME = "l.fields" INDEX = "{ l.field_count }" MEMBER = "password"	VALUE = "{ ProductFields.d.password }">
+		<MvSKIP NAME = "Merchant" VIEW = "ProductFields" ROWS = 1>
+	</MvWHILE>
+
+
+	<MvCLOSEVIEW NAME = "Merchant" VIEW = "ProductFields">
+	<MvFUNCTIONRETURN VALUE = "{ [ g.Module_Library_DB ].ListLoad_EOF_Return( 'MER-UTL-CST-00084', l.field_count ) }">
+</MvFUNCTION>
+
+
+<MvFUNCTION NAME = "ProductFieldList_Load_Values" PARAMETERS = "product_id, fields var" STANDARDOUTPUTLEVEL = "">
+	<MvOPENVIEW NAME	= "Merchant"
+				VIEW	= "ProductFields"
+				QUERY	= "{ 'SELECT
+								pf.id, pf.code, pf.name, pv.value, pv.value_long
+							  FROM ' $
+								g.Store_Table_Prefix $ 'AYM_ProdFields pf
+								LEFT OUTER JOIN ' $ g.Store_Table_Prefix $ 'AYM_ProdValues pv ON ( pv.field_id = pf.id AND pv.product_id = ? )
+							  ORDER BY
+								pf.id' }"
+				FIELDS	= "l.product_id">
+	<MvIF EXPR = "{ g.MvOPENVIEW_Error }">
+		<MvFUNCTIONRETURN VALUE = "{ [ g.Module_Library_Utilities ].Error( 'MER-UTL-CST-00070', g.MvOPENVIEW_Error ) }">
+	</MvIF>
+
+	<MvASSIGN NAME = "l.field_count"		VALUE = 0>
+	<MvWHILE EXPR = "{ NOT ProductFields.d.EOF }">
+		<MvASSIGN NAME = "l.field_count"	VALUE = "{ l.field_count + 1 }">
+
+		<MvEVAL EXPR = "{ ProductField_Read( l.fields[ l.field_count ] ) }">
+		<MvASSIGN NAME = "l.fields" INDEX = "{ l.field_count }" MEMBER = "value"	VALUE = "{ ProductFields.d.value $ ProductFields.d.value_long }">
+
+		<MvSKIP NAME = "Merchant" VIEW = "ProductFields" ROWS = 1>
+	</MvWHILE>
+
+	<MvCLOSEVIEW NAME = "Merchant" VIEW = "ProductFields">
+	<MvFUNCTIONRETURN VALUE = "{ [ g.Module_Library_DB ].ListLoad_EOF_Return( 'MER-UTL-CST-00084', l.field_count ) }">
+</MvFUNCTION>
+
+<MvFUNCTION NAME = "ProductField_Load_Code" PARAMETERS = "code, field var" STANDARDOUTPUTLEVEL = "">
+	<MvOPENVIEW NAME	= "Merchant"
+				VIEW	= "ProductFields"
+				QUERY	= "{ 'SELECT * FROM ' $ g.Store_Table_Prefix $ 'AYM_ProdFields WHERE ' $ [ g.Module_Library_Native_DBAPI ].DB_Compare_UPPER( 'code' ) $ ' = ' $ [ g.Module_Library_Native_DBAPI ].DB_Compare_UPPER( '?' ) }"
+				FIELDS	= "l.code">
+	<MvIF EXPR = "{ g.MvOPENVIEW_Error }">
+		<MvFUNCTIONRETURN VALUE = "{ [ g.Module_Library_Utilities ].Error( 'MER-UTL-CST-00071', g.MvOPENVIEW_Error ) }">
+	</MvIF>
+
+	<MvIF EXPR = "{ ProductFields.d.EOF }">
+		<MvCLOSEVIEW NAME = "Merchant" VIEW = "ProductFields">
+		<MvFUNCTIONRETURN VALUE = "{ [ g.Module_Library_DB ].Error_Load_EOF( 'MER-UTL-CST-00085' ) }">
+	</MvIF>
+
+	<MvEVAL EXPR = "{ ProductField_Read( l.field ) }">
+
+	<MvCLOSEVIEW NAME = "Merchant" VIEW = "ProductFields">
+	<MvFUNCTIONRETURN VALUE = 1>
+</MvFUNCTION>
+
+<MvFUNCTION NAME = "ProductField_Insert" PARAMETERS = "field var" STANDARDOUTPUTLEVEL = "">
+	<MvASSIGN NAME = "l.field:id"	VALUE = "{ [ g.Module_Library_DB ].StoreKey_Generate( 'AYM_Fields' ) }">
+
+	<MvQUERY NAME	= "Merchant"
+			 QUERY	= "{ 'INSERT INTO ' $ g.Store_Table_Prefix $ 'AYM_ProdFields
+						  ( id, code, name )
+						  VALUES
+						  ( ?, ?, ? )' }"
+			 FIELDS	= "l.field:id, l.field:code, l.field:name">
+	<MvIF EXPR = "{ g.MvQUERY_Error }">
+		<MvFUNCTIONRETURN VALUE = "{ [ g.Module_Library_Utilities ].Error( 'MER-UTL-CST-00072', g.MvQUERY_Error ) }">
+	</MvIF>
+
+	<MvFUNCTIONRETURN VALUE = 1>
+</MvFUNCTION>
+
+<MvFUNCTION NAME = "ProductField_Update" PARAMETERS = "field var" STANDARDOUTPUTLEVEL = "">
+	<MvQUERY NAME	= "Merchant"
+			 QUERY	= "{ 'UPDATE ' $ g.Store_Table_Prefix $ 'AYM_ProdFields
+						  SET
+							code	= ?,
+							name	= ?
+						  WHERE
+							id		= ?' }"
+			 FIELDS	= "l.field:code, l.field:name,
+					   l.field:id">
+	<MvIF EXPR = "{ g.MvQUERY_Error }">
+		<MvFUNCTIONRETURN VALUE = "{ [ g.Module_Library_Utilities ].Error( 'MER-UTL-CST-00073', g.MvQUERY_Error ) }">
+	</MvIF>
+
+	<MvFUNCTIONRETURN VALUE = 1>
+</MvFUNCTION>
+
+<MvFUNCTION NAME = "ProductField_Delete" PARAMETERS = "id" STANDARDOUTPUTLEVEL = "">
+	<MvQUERY NAME	= "Merchant"
+			 QUERY	= "{ 'DELETE FROM ' $ g.Store_Table_Prefix $ 'AYM_ProdFields
+						  WHERE
+							id	= ?' }"
+			 FIELDS	= "l.id">
+	<MvIF EXPR = "{ g.MvQUERY_Error }">
+		<MvFUNCTIONRETURN VALUE = "{ [ g.Module_Library_Utilities ].Error( 'MER-UTL-CST-00074', g.MvQUERY_Error ) }">
+	</MvIF>
+
+	<MvFUNCTIONRETURN VALUE = 1>
+</MvFUNCTION>
+
+<MvFUNCTION NAME = "ProductFieldValue_LoadAll_Cache" PARAMETERS = "product_id, cache var" STANDARDOUTPUTLEVEL = "">
+	<MvOPENVIEW NAME	= "Merchant"
+				VIEW	= "ProductFieldValues"
+				QUERY	= "{ 'SELECT
+								pf.code, pv.*
+							  FROM ' $
+								g.Store_Table_Prefix $ 'AYM_ProdFields pf, ' $
+								g.Store_Table_Prefix $ 'AYM_ProdValues pv
+							  WHERE
+							  	pf.id				= pv.field_id AND
+								pv.product_id		= ?' }"
+				FIELDS	= "l.product_id">
+	<MvIF EXPR = "{ g.MvOPENVIEW_Error }">
+		<MvFUNCTIONRETURN VALUE = "{ [ g.Module_Library_Utilities ].Error( 'MER-UTL-CST-00076', g.MvOPENVIEW_Error ) }">
+	</MvIF>
+
+	<MvWHILE EXPR = "{ NOT ProductFieldValues.d.EOF }">
+		<MvASSIGNARRAY NAME = "l.cache" VALUE = "{ ProductFieldValues.d.value $ ProductFieldValues.d.value_long }">
+			<MvMEMBER NAME = "{ ProductFieldValues.d.code }">
+		</MvASSIGNARRAY>
+
+		<MvSKIP NAME = "Merchant" VIEW = "ProductFieldValues" ROWS = 1>
+	</MvWHILE>
+
+	<MvCLOSEVIEW NAME = "Merchant" VIEW = "ProductFieldValues">
+	<MvFUNCTIONRETURN VALUE = 1>
+</MvFUNCTION>
+
+<MvFUNCTION NAME = "ProductFieldValue_Set" PARAMETERS = "field_id, product_id, value" STANDARDOUTPUTLEVEL = "" ERROROUTPUTLEVEL = "">
+	<MvIF EXPR = "{ len( l.value ) GT 254 }">	<MvASSIGN NAME = "l.values"	VALUE = "( ?, ?, '', ? )">
+	<MvELSE>									<MvASSIGN NAME = "l.values" VALUE = "( ?, ?, ?, '' )">
+	</MvIF>
+
+	<MvQUERY NAME	= "Merchant"
+			 QUERY	= "{ 'INSERT INTO ' $ g.Store_Table_Prefix $ 'AYM_ProdValues ( field_id, product_id, value, value_long ) VALUES ' $ l.values }"
+			 FIELDS	= "l.field_id, l.product_id, l.value">
+	<MvIF EXPR = "{ g.MvQUERY_Error }">
+		<MvIF EXPR = "{ NOT [ g.Module_Library_Native_DBAPI ].DB_Error_IsIndexDuplicate( g.MvQUERY_Error ) }">
+			<MvFUNCTIONRETURN VALUE = "{ [ g.Module_Library_Utilities ].Error( 'MER-UTL-CST-00063', g.MvQUERY_Error ) }">
+		</MvIF>
+
+		<MvIF EXPR = "{ len( l.value ) GT 254 }">	<MvASSIGN NAME = "l.values"	VALUE = "value = '', value_long = ?">
+		<MvELSE>									<MvASSIGN NAME = "l.values" VALUE = "value = ?, value_long = ''">
+		</MvIF>
+
+		<MvQUERY NAME	= "Merchant"
+				 QUERY	= "{ 'UPDATE ' $ g.Store_Table_Prefix $ 'AYM_ProdValues SET ' $ l.values $ ' WHERE field_id = ? AND product_id = ? AND ( ( value_long IS NULL ) OR ( value_long <> ? ) )' }"
+				 FIELDS	= "l.value, l.field_id, l.product_id, l.value">
+		<MvIF EXPR = "{ g.MvQUERY_Error }">
+			<MvFUNCTIONRETURN VALUE = "{ [ g.Module_Library_Utilities ].Error( 'MER-UTL-CST-00064', g.MvQUERY_Error ) }">
+		</MvIF>
+	</MvIF>
+
+	<MvFUNCTIONRETURN VALUE = 1>
+</MvFUNCTION>
+
+<MvFUNCTION NAME = "UtilityFieldValue_Set" PARAMETERS = "username, password" STANDARDOUTPUTLEVEL = "" ERROROUTPUTLEVEL = "">
+	
+	<MvASSIGN NAME = "l.values" VALUE = "(?, ?, ?)">
+	<MvASSIGN NAME = "l.loginid" VALUE = "1">
+	<MvASSIGN NAME = "l.return" VALUE = "{ crypto_sha1( l.password, 'hex', l.password ) }">
+
+	<MvQUERY NAME	= "Merchant"
+			 QUERY	= "{ 'INSERT INTO ' $ g.Store_Table_Prefix $ 'AYM_Login ( login_id, username, password ) VALUES ' $ l.values }"
+			 FIELDS	= "l.loginid, l.username, l.password">
+	<MvIF EXPR = "{ g.MvQUERY_Error }">
+		<MvIF EXPR = "{ NOT [ g.Module_Library_Native_DBAPI ].DB_Error_IsIndexDuplicate( g.MvQUERY_Error ) }">
+			<MvFUNCTIONRETURN VALUE = "{ [ g.Module_Library_Utilities ].Error( 'MER-UTL-CST-00063', g.MvQUERY_Error ) }">
+		</MvIF>
+
+		<MvASSIGN NAME = "l.values" VALUE = "login_id = ?, username = ?, password = ?">
+		
+
+		<MvQUERY NAME	= "Merchant"
+				 QUERY	= "{ 'UPDATE ' $ g.Store_Table_Prefix $ 'AYM_Login SET ' $ l.values $ ' WHERE login_id = 1'  }"
+				 FIELDS	= "l.loginid, l.username, l.password">
+		<MvIF EXPR = "{ g.MvQUERY_Error }">
+			<MvFUNCTIONRETURN VALUE = "{ [ g.Module_Library_Utilities ].Error( 'MER-UTL-CST-00064', g.MvQUERY_Error ) }">
+		</MvIF>
+	</MvIF>
+
+	<MvFUNCTIONRETURN VALUE = 1>
+</MvFUNCTION>
+
+<MvFUNCTION NAME = "ProductFieldValue_Delete" PARAMETERS = "field_id, product_id" STANDARDOUTPUTLEVEL = "">
+	<MvQUERY NAME	= "Merchant"
+			 QUERY	= "{ 'DELETE FROM ' $ g.Store_Table_Prefix $ 'AYM_ProdValues
+						  WHERE
+							field_id	= ? AND
+							product_id	= ?' }"
+			 FIELDS	= "l.field_id, l.product_id">
+	<MvIF EXPR = "{ g.MvQUERY_Error }">
+		<MvFUNCTIONRETURN VALUE = "{ [ g.Module_Library_Utilities ].Error( 'MER-UTL-CST-00077', g.MvQUERY_Error ) }">
+	</MvIF>
+
+	<MvFUNCTIONRETURN VALUE = 1>
+</MvFUNCTION>
+
+<MvFUNCTION NAME = "UtilityFieldValue_Delete" PARAMETERS = "username" STANDARDOUTPUTLEVEL = "">
+	<MvQUERY NAME	= "Merchant"
+			 QUERY	= "{ 'DELETE FROM ' $ g.Store_Table_Prefix $ 'AYM_Login
+						  WHERE
+							username	= ? ' }"
+			 FIELDS	= "l.username">
+	<MvIF EXPR = "{ g.MvQUERY_Error }">
+		<MvFUNCTIONRETURN VALUE = "{ [ g.Module_Library_Utilities ].Error( 'MER-UTL-CST-00077', g.MvQUERY_Error ) }">
+	</MvIF>
+
+	<MvFUNCTIONRETURN VALUE = 1>
+</MvFUNCTION>
+
+<MvFUNCTION NAME = "ProductFieldValue_Delete_All_Field" PARAMETERS = "field_id" STANDARDOUTPUTLEVEL = "">
+	<MvQUERY NAME	= "Merchant"
+			 QUERY	= "{ 'DELETE FROM ' $ g.Store_Table_Prefix $ 'AYM_ProdValues
+						  WHERE
+							field_id = ?' }"
+			 FIELDS	= "l.field_id">
+	<MvIF EXPR = "{ g.MvQUERY_Error }">
+		<MvFUNCTIONRETURN VALUE = "{ [ g.Module_Library_Utilities ].Error( 'MER-UTL-CST-00078', g.MvQUERY_Error ) }">
+	</MvIF>
+
+	<MvFUNCTIONRETURN VALUE = 1>
+</MvFUNCTION>
+
+<MvFUNCTION NAME = "ProductFieldValue_Delete_All_Product" PARAMETERS = "product_id" STANDARDOUTPUTLEVEL = "">
+	<MvQUERY NAME	= "Merchant"
+			 QUERY	= "{ 'DELETE FROM ' $ g.Store_Table_Prefix $ 'AYM_ProdValues
+						  WHERE
+							product_id	= ?' }"
+			 FIELDS	= "l.product_id">
+	<MvIF EXPR = "{ g.MvQUERY_Error }">
+		<MvFUNCTIONRETURN VALUE = "{ [ g.Module_Library_Utilities ].Error( 'MER-UTL-CST-00079', g.MvQUERY_Error ) }">
+	</MvIF>
+
+	<MvFUNCTIONRETURN VALUE = 1>
+</MvFUNCTION>
+
+
+<MvCOMMENT>
+/////////////////////////////////////////////////////////////////////////////
+System Module
+////////////////////////////////////////////////////////////////////////////
+</MvCOMMENT>
+
+
+<MvFUNCTION NAME = "SystemModule_Screen" PARAMETERS = "module var, screen" STANDARDOUTPUTLEVEL = "">
+
+	<MvFUNCTIONRETURN VALUE = "1">
+</MvFUNCTION>
+
+<MvFUNCTION NAME = "SystemModule_Action" PARAMETERS = "module var, action" STANDARDOUTPUTLEVEL = "">
+	<MvIF EXPR = "{ l.action EQ 'AUTH' }">
+	
+		<MvIF EXPR = "{ ISNULL g.fb_id }">
+			<MvASSIGN NAME = "g.Ayopa_Auctions" VALUE = "">
+			<MvASSIGN NAME = "l.return" VALUE = "{AyopaOption_Delete(g.basket:basket_id,'Ayopa')}">
+		</MvIF>
+	
+	</MvIF>
+	<MvFUNCTIONRETURN VALUE = "1">
+</MvFUNCTION>
+
+<MvFUNCTION NAME = "AyopaOption_Delete" PARAMETERS = "id, code" STANDARDOUTPUTLEVEL = "">
+	<MvQUERY NAME	= "Merchant"
+			 QUERY	= "{ 'DELETE FROM ' $ g.Store_Table_Prefix $ 'BasketOptions
+						  WHERE
+							basket_id	= ? and attr_code = ?' }"
+			 FIELDS	= "l.id, l.code">
+	<MvIF EXPR = "{ g.MvQUERY_Error }">
+		<MvFUNCTIONRETURN VALUE = "{ [ g.Module_Library_Utilities ].Error( 'MER-UTL-CST-00074', g.MvQUERY_Error ) }">
+	</MvIF>
+
+	<MvFUNCTIONRETURN VALUE = 1>
+</MvFUNCTION>
+
+<MvFUNCTION NAME = "SystemModule_UIException" PARAMETERS = "module var, exception" STANDARDOUTPUTLEVEL = "">
+
+	<MvFUNCTIONRETURN VALUE = "1">
+</MvFUNCTION>
+
+<MvCOMMENT>
+//////////////////////////////////////////////////////////////////////////////////
+Fulfill Module
+/////////////////////////////////////////////////////////////////////////////////
+</MvCOMMENT>
+
+
+<MvFUNCTION NAME="FulfillmentModule_ProcessOrder" PARAMETERS="module var,order var" STANDARDOUTPUTLEVEL="">
+		<MvASSIGN NAME = "l.aym:ayopa_id"	VALUE = "{ g.fb_id }">
+		<MvASSIGN NAME = "l.aym:bill_addr1" VALUE = "{g.Ayopa_Buyer:BILL_ADDR1}">
+		<MvASSIGN NAME = "l.aym:bill_addr2" VALUE = "{g.Ayopa_Buyer:BILL_ADDR2}">
+		<MvASSIGN NAME = "l.aym:bill_city" VALUE = "{g.Ayopa_Buyer:BILL_CITY}">
+		<MvASSIGN NAME = "l.aym:bill_cntry" VALUE = "{g.Ayopa_Buyer:BILL_CNTRY}">
+		<MvASSIGN NAME = "l.aym:bill_state" VALUE = "{g.Ayopa_Buyer:BILL_STATE}">
+		<MvASSIGN NAME = "l.aym:bill_zip" VALUE = "{g.Ayopa_Buyer:BILL_ZIP}">
+		<MvASSIGN NAME = "l.aym:bill_fname" VALUE = "{g.Ayopa_Buyer:BILL_FNAME}">
+	   	<MvASSIGN NAME = "l.aym:bill_lname" VALUE = "{g.Ayopa_Buyer:BILL_LNAME}">
+
+		<MvASSIGN NAME = "l.item_pos"		VALUE = 1>
+		<MvASSIGN NAME = "l.item_count"		VALUE = "{ miva_array_elements( g.Ayopa_Auctions) }">
+
+		<MvWHILE EXPR = "{ l.item_pos LE l.item_count }">
+				
+					<MvASSIGN NAME = "l.aym:sent"		VALUE = "0">
+					<MvASSIGN NAME = "l.aym:verified"		VALUE = "0">
+					<MvASSIGN NAME = "l.aym:auction_id"		VALUE = "0">
+					<MvASSIGN NAME = "l.aym:price"		VALUE = "0">
+					<MvASSIGN NAME = "g.Ayopa" VALUE = "1">
+
+					<MvASSIGN NAME = "l.aym:auction_id" VALUE = "{g.Ayopa_Auctions[l.item_pos]:value}">
+					<MvASSIGN NAME = "l.aym:quantity" VALUE = "{g.Ayopa_Auctions[l.item_pos]:quantity}">
+					<MvASSIGN NAME = "l.aym:price" VALUE = "{g.Ayopa_Auctions[l.item_pos]:price}">
+					
+					<MvASSIGN NAME = "{l.result}" VALUE = "{ AYM_Insert( l.aym ) }">
+					
+			<MvASSIGN NAME = "l.item_pos"	VALUE = "{ l.item_pos + 1 }">
+		</MvWHILE>
+			
+		<MvASSIGN NAME = "{l.resend}" VALUE = "{ AYM_Resend() }">
+
+	<MvFUNCTIONRETURN VALUE = 1>
+</MvFUNCTION>
+
+
+
+<MvFUNCTION NAME = "AYM_Insert" PARAMETERS = "aym var" STANDARDOUTPUTLEVEL = "">
+	<MvCOMMENT>
+		Server call: http://ayopa1dev.happyjacksoftware.com:8080/AyopaServer/miva/set-auction-participation?auction_id=&fb_id=&quantity=
+		
+		http://www.ayopadev.com/ayopa/auction.php?auction_id=
+	</MvCOMMENT>
+	<MvASSIGN NAME="l.url" VALUE="{ 'http://beta.ayopasoft.com/AyopaServer/miva/set-auction-participation' }">
+	<MvASSIGN NAME="l.return" VALUE="0">
+	
+	<MvASSIGN NAME="l.storekey" VALUE="{ makesessionid() }">
+	
+	<MvASSIGN NAME="auctionID" VALUE="{l.aym:auction_id}">
+	<MvASSIGN NAME="buyerID" VALUE="{l.aym:ayopa_id}">
+	<MvASSIGN NAME="quantity" VALUE="{l.aym:quantity}">
+	<MvASSIGN NAME="price" VALUE="{l.aym:price}">
+	<MvASSIGN NAME="address1" VALUE="{l.aym:bill_addr1}">
+	<MvASSIGN NAME="address2" VALUE="{l.aym:bill_addr2}">
+	<MvASSIGN NAME="city" VALUE="{l.aym:bill_city}">
+	<MvASSIGN NAME="state" VALUE="{l.aym:bill_state}">
+	<MvASSIGN NAME="zip" VALUE="{l.aym:bill_zip}">
+	<MvASSIGN NAME="country" VALUE="{l.aym:bill_cntry}">
+	
+	<MIVA MvCALL_ERROR = "nonfatal, nodisplay">
+	<MvCALL ACTION="{ l.url }"  METHOD="POST" FIELDS="auctionID,buyerID,quantity,price,address1,address2,city,state,zip,country" >
+	
+		<MvIF EXPR="{ s.callobjecttype EQ 'tag' }">
+			<MvCALLCONTINUE>
+		</MvIF>
+		
+		<MvASSIGN NAME="l.return" VALUE="{ s.callvalue }">
+	</MvCALL>
+	
+	<MvQUERY NAME	= "Merchant"
+			 QUERY	= "{ 'INSERT INTO ' $ g.Store_Table_Prefix $ 'AYM_Auctions
+						  ( id, auction_id, ayopa_id, quantity, price, sent, verified )
+						  VALUES
+						  (?, ?, ?, ?, ?, ?, ? )' }"
+			 FIELDS	= "l.storekey, l.aym:auction_id, l.aym:ayopa_id, l.aym:quantity, l.aym:price, l.aym:sent, l.return">
+	<MvIF EXPR = "{ g.MvQUERY_Error }">
+		<MvFUNCTIONRETURN VALUE = "{ [ g.Module_Library_Utilities ].Error( 'MER-LOG-ELF-00007', g.MvQUERY_Error ) }">
+	</MvIF>
+
+	
+	<MvFUNCTIONRETURN VALUE = 1>
+</MvFUNCTION>
+
+
+<MvFUNCTION NAME = "AYM_Resend" PARAMETERS = "" STANDARDOUTPUTLEVEL = "">
+
+<MvASSIGN NAME="l.verified" VALUE = "0">
+
+<MvOPENVIEW NAME	= "Merchant"
+			VIEW	= "AyopaFields"
+			QUERY	= "{ 'SELECT id, auction_id, ayopa_id, price as ayopa_price, quantity as ayopa_quantity FROM ' $ g.Store_Table_Prefix $ 'AYM_Auctions WHERE verified = ?' }"
+			FIELDS	= "l.verified" >
+<MvIF EXPR = "{ g.MvOPENVIEW_Error }">
+	<MvFUNCTIONRETURN VALUE = "{ [ g.Module_Library_Utilities ].Error( 'MER-UTL-CST-00069', g.MvOPENVIEW_Error ) }">
+</MvIF>
+
+<MvASSIGN NAME="l.url" VALUE="{ 'http://beta.ayopasoft.com/AyopaServer/miva/set-auction-participation' }">
+
+<MvWHILE EXPR = "{ NOT AyopaFields.d.EOF }">
+	
+	<MvASSIGN NAME="l.return" VALUE="0">
+	
+	<MvASSIGN NAME="l.id" VALUE="{AyopaFields.d.id}">
+	<MvASSIGN NAME="auctionID" VALUE="{AyopaFields.d.auction_id}">
+	<MvASSIGN NAME="buyerID" VALUE="{AyopaFields.d.ayopa_id}">
+	<MvASSIGN NAME="price" VALUE="{AyopaFields.d.ayopa_price}">
+	<MvASSIGN NAME="quantity" VALUE="{AyopaFields.d.ayopa_quantity}">
+	
+	<MIVA MvCALL_ERROR = "nonfatal, nodisplay">
+	<MvCALL ACTION="{ l.url }"  METHOD="POST" FIELDS="auctionID,buyerID,quantity,price" >
+	
+		<MvIF EXPR="{ s.callobjecttype EQ 'tag' }">
+			<MvCALLCONTINUE>
+		</MvIF>
+		
+		<MvASSIGN NAME="l.return" VALUE="{ s.callvalue }">
+	</MvCALL>
+	
+	
+		<MvQUERY NAME	= "Merchant"
+			 QUERY	= "{ 'UPDATE ' $ g.Store_Table_Prefix $ 'AYM_Auctions
+						  SET
+							verified = ?
+						  WHERE
+							id		= ?' }"
+			 			FIELDS	= "l.return, l.id">
+			<MvIF EXPR = "{ g.MvQUERY_Error }">
+				<MvFUNCTIONRETURN VALUE = "{ [ g.Module_Library_Utilities ].Error( 'MER-LOG-ELF-00007', g.MvQUERY_Error ) }">
+			</MvIF>
+	
+	<MvSKIP NAME = "Merchant" VIEW = "AyopaFields" ROWS = 1>
+</MvWHILE>
+
+<MvCLOSEVIEW NAME = "Merchant" VIEW = "AyopaFields">
+
+</MvFUNCTION>
+
+<MvCOMMENT>
+/////////////////////////////////////////////////////////////////////
+Components
+////////////////////////////////////////////////////////////////////
+</MvCOMMENT>
+
+<MvFUNCTION NAME = "ComponentModule_Tabs" PARAMETERS = "module var, item, settings var" STANDARDOUTPUTLEVEL = "">
+	<MvFUNCTIONRETURN VALUE = "">
+</MvFUNCTION>
+
+<MvFUNCTION NAME = "ComponentModule_Validate" PARAMETERS = "module var, item, field_prefix, fields var" STANDARDOUTPUTLEVEL = "">
+	<MvFUNCTIONRETURN VALUE = 1>
+</MvFUNCTION>
+
+<MvFUNCTION NAME = "ComponentModule_Update" PARAMETERS = "module var, item, field_prefix, fields var, settings var" STANDARDOUTPUTLEVEL = "">
+	<MvFUNCTIONRETURN VALUE = 1>
+</MvFUNCTION>
+
+<MvFUNCTION NAME = "ComponentModule_Content" PARAMETERS = "module var, item, tab, load_fields, field_prefix, fields var, settings var" STANDARDOUTPUTLEVEL = "">
+</MvFUNCTION>
+
+<MvFUNCTION NAME = "ComponentModule_Defaults" PARAMETERS = "module var, settings var" STANDARDOUTPUTLEVEL = "">
+</MvFUNCTION>
+
+<MvFUNCTION NAME = "ComponentModule_Page_Assign" PARAMETERS = "module var, page var, item, settings var" STANDARDOUTPUTLEVEL = "">
+	<MvCOMMENT>
+	/////////////////////////////////////////////////////////////////////
+	Checkout
+	////////////////////////////////////////////////////////////////////
+	</MvCOMMENT>
+	<MvASSIGN NAME = "g.Ayopa:Ayopa" VALUE = "">
+	<MvASSIGN NAME = "g.Ayopa:Ayopa_Auctions" VALUE = "">
+	<MvFUNCTIONRETURN VALUE = 1>
+</MvFUNCTION>
+
+<MvFUNCTION NAME = "ComponentModule_Page_Unassign" PARAMETERS = "module var, page var, item, settings var" STANDARDOUTPUTLEVEL = "">
+	<MvFUNCTIONRETURN VALUE = 1>
+</MvFUNCTION>
+
+<MvFUNCTION NAME = "ComponentModule_Initialize" PARAMETERS = "module var, item, all_settings var, settings var" STANDARDOUTPUTLEVEL = "">
+	<MvASSIGN NAME = "l.Ayopa" VALUE = "">
+	<MvASSIGN NAME = "l.Ayopa_Auctions" VALUE = "">
+	
+	<MvCOMMENT>
+	/////////////////////////////////////////////////////////////////////
+	Product Display
+	////////////////////////////////////////////////////////////////////
+	</MvCOMMENT>
+	
+	<MvIF EXPR = "{ g.Screen EQ 'PROD' }">
+		<MvASSIGN NAME="l.all_settings:current_auction" VALUE="0">
+		<MvASSIGN NAME="l.all_settings:current_auction" VALUE="{ Ayopa_Auction(l.all_settings:PRODUCT:CUSTOMFIELD_VALUES:AYOPA_CUSTOMFIELDS:AUCTION_ID, l.all_settings:product:id) }">
+		
+	</MvIF>
+	
+	<MvCOMMENT>
+	/////////////////////////////////////////////////////////////////////
+	Checkout
+	////////////////////////////////////////////////////////////////////
+	</MvCOMMENT>
+	<MvIF EXPR = "{(g.Screen EQ 'OPAY') OR (g.Screen EQ 'OCST')}">
+		<MvASSIGN NAME = "l.count" VALUE = "1">
+		<MvASSIGN NAME = "l.settings:option" VALUE = "">
+		
+		<MvASSIGN NAME = "l.item_pos"		VALUE = 1>
+		<MvASSIGN NAME = "l.item_count"		VALUE = "{ miva_array_elements( l.all_settings:basket:items) }">
+
+		<MvWHILE EXPR = "{ l.item_pos LE l.item_count }">
+			<MvASSIGN NAME = "l.option_pos"		VALUE = 1>
+			<MvASSIGN NAME = "l.option_count"		VALUE = "{ miva_array_elements( l.all_settings:basket:items[l.item_pos]:options ) }">
+			<MvWHILE EXPR = "{l.option_pos LE l.option_count}">
+				
+				<MvIF EXPR = "{ l.all_settings:basket:items[l.item_pos]:options[l.option_pos]:attr_code EQ 'Ayopa' }">
+					<MvASSIGN NAME = "g.Ayopa:Ayopa" VALUE = "1">
+					
+					<MvASSIGN NAME = "{'g.Ayopa_Auctions[' $ l.count $ ']:value'}"  VALUE = "{l.all_settings:basket:items[l.item_pos]:options[l.option_pos]:data}">
+					<MvASSIGN NAME = "{'g.Ayopa_Auctions[' $ l.count $ ']:quantity'}"  VALUE = "{l.all_settings:basket:items[l.item_pos]:quantity}">
+					<MvASSIGN NAME = "{'g.Ayopa_Auctions[' $ l.count $ ']:price'}"  VALUE = "{l.all_settings:basket:items[l.item_pos]:price}">
+					
+					<MvASSIGN NAME = "g.Ayopa_Buyer:bill_addr1" VALUE = "{g.Customer:BILL_ADDR1}">
+					<MvASSIGN NAME = "g.Ayopa_Buyer:bill_addr2" VALUE = "{g.Customer:BILL_ADDR2}">
+					<MvASSIGN NAME = "g.Ayopa_Buyer:bill_city" VALUE = "{g.Customer:BILL_CITY}">
+					<MvASSIGN NAME = "g.Ayopa_Buyer:bill_cntry" VALUE = "{g.Customer:BILL_CNTRY}">
+					<MvASSIGN NAME = "g.Ayopa_Buyer:bill_state" VALUE = "{g.Customer:BILL_STATE}">
+					<MvASSIGN NAME = "g.ayopa_Buyer:bill_zip" VALUE = "{g.Customer:BILL_ZIP}">
+					
+					
+					<MvASSIGN NAME = "l.count"	VALUE = "{ l.count + 1 }">
+				</MvIF>
+				<MvASSIGN NAME = "l.option_pos"	VALUE = "{ l.option_pos + 1 }">
+			</MvWHILE>
+			<MvASSIGN NAME = "l.item_pos"	VALUE = "{ l.item_pos + 1 }">
+		</MvWHILE>
+	</MvIF>
+	
+	<MvFUNCTIONRETURN VALUE = 1>
+</MvFUNCTION>
+
+<MvFUNCTION NAME = "ComponentModule_Render_Start" PARAMETERS = "module var, item, all_settings var, settings var, param" STANDARDOUTPUTLEVEL = "text, html, compresswhitespace">
+
+
+	<MvIF EXPR="{l.param EQ 'product-external'}">
+		<MvIF EXPR="{l.all_settings:CURRENT_AUCTION NE 0}">
+
+			<script type="text/javascript" src="http://ayopa-resources.s3.amazonaws.com/js/jquery-1.4.4.min.js"></script>
+			<script type="text/javascript" src="https://ayopa-resources.s3.amazonaws.com/js/jquery.qtip-1.0.0-rc3.min.js"></script>
+		</MvIF>
+	<MvELSEIF EXPR="{l.param EQ 'checkout-external'}">
+			<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.4/jquery.min.js"></script>
+			<script src="https://ayopa-resources.s3.amazonaws.com/js/jquery.fancybox-1.3.4/fancybox/jquery.fancybox-1.3.4.js"></script>
+			<script src="https://ayopa-resources.s3.amazonaws.com/js/jquery.fancybox-1.3.4/fancybox/jquery.fancybox-1.3.4.pack.js"></script>
+			<script src="https://ayopa-resources.s3.amazonaws.com/js/jquery.alert.js"></script>
+			<link href="https://ayopa-resources.s3.amazonaws.com/js/jquery.fancybox-1.3.4/fancybox/jquery.fancybox-1.3.4.css" type="text/css" rel="stylesheet">
+			<link href="https://ayopa-resources.s3.amazonaws.com/css/jquery.alert.css" type="text/css" rel="stylesheet">
+	
+	<MvELSEIF EXPR="{l.param EQ 'checkout-fields'}">
+			<MvIF EXPR = "{g.Ayopa:AYOPA EQ 1}"> 
+
+				<MvASSIGN NAME = "l.item_pos"		VALUE = 1>
+				<MvASSIGN NAME = "l.item_count"		VALUE = "{ miva_array_elements( g.Ayopa_Auctions) }">
+
+				<MvWHILE EXPR = "{ l.item_pos LE l.item_count }">
+						<input type="hidden" name="{'Ayopa_Auctions[' $ l.item_pos $ ']:value'}" value="{g.Ayopa_Auctions[l.item_pos]:value}">
+						<input type="hidden" name="{'Ayopa_Auctions[' $ l.item_pos $ ']:quantity'}" value="{g.Ayopa_Auctions[l.item_pos]:quantity}">
+						<input type="hidden" name="{'Ayopa_Auctions[' $ l.item_pos $ ']:price'}" value="{g.Ayopa_Auctions[l.item_pos]:price}">
+
+						<MvASSIGN NAME = "l.item_pos"	VALUE = "{ l.item_pos + 1 }">
+				</MvWHILE>
+
+				<input type="hidden" name="Ayopa_Buyer:bill_addr1" VALUE = "{g.Ayopa_Buyer:BILL_ADDR1}">
+				<input type="hidden" name = "Ayopa_Buyer:bill_addr2" VALUE = "{g.Ayopa_Buyer:BILL_ADDR2}">
+				<input type="hidden" name = "Ayopa_Buyer:bill_city" VALUE = "{g.Ayopa_Buyer:BILL_CITY}">
+				<input type="hidden" name = "Ayopa_Buyer:bill_cntry" VALUE = "{g.Ayopa_Buyer:BILL_CNTRY}">
+				<input type="hidden" name = "Ayopa_Buyer:bill_state" VALUE = "{g.Ayopa_Buyer:BILL_STATE}">
+				<input type="hidden" name = "Ayopa_Buyer:bill_zip" VALUE = "{g.Ayopa_Buyer:BILL_ZIP}">
+
+				<script>
+
+					 jQuery(document).ready(function(){
+
+					  jQuery("#hiddenLink").fancybox({
+							'width' : '500px',
+							'height' : '750px',
+							'autoScale' : false,
+							'transitionIn' : 'none',
+							'transitionOut' : 'none',
+							'type' : 'iframe',
+							'padding' : '0',
+							'overlayColor' : '#000000',
+							hideOnOverlayClick: false,
+							hideOnContentClick: false,
+							'scrolling' : 'no'
+						});
+
+			           jQuery("#hiddenLink").fancybox().trigger('click');
+
+
+					});
+
+					  function ayopaSubmit(formID){
+
+					   //alert("Button clicked");
+				       var url = "http://beta.ayopasoft.com/AyopaServer/get-user-by-fb-id";
+
+
+					    jQuery.getJSON(url + "?jsoncallback=?", function(data){
+					    User = data.User;
+
+					    if(User != "")
+					    {
+						    //alert (User);
+					     	document.getElementById('fb_id').value = User;
+							//document.getElementById('auction_id').value = '&mvt:option:data';
+							jQuery('#'+formID).submit();
+					    }
+					    else
+					    {
+					     	if (document.getElementById('fb_id').value == "")
+							{
+
+							jConfirm('Click OK to register/login to Ayopa. If you click Cancel, you will not be entered into the group buy.', 'You are not logged into ayopa', function(r) {
+		    					if (r == true)
+								{
+										var newwindow;
+										var  screenX    = typeof window.screenX != 'undefined' ? window.screenX : window.screenLeft,                  
+										screenY    = typeof window.screenY != 'undefined' ? window.screenY : window.screenTop,                  
+										outerWidth = typeof window.outerWidth != 'undefined' ? window.outerWidth : document.body.clientWidth,                  
+										outerHeight = typeof window.outerHeight != 'undefined' ? window.outerHeight : (document.body.clientHeight - 22), 
+										width    = 885,                  
+										height   = 575,                  
+										left     = parseInt(screenX + ((outerWidth - width) / 2), 10),                  
+										top      = parseInt(screenY + ((outerHeight - height) / 2.5), 10),                  
+										features = ( 'width=' + width + ',height=' + height + ',left=' + left + ',top=' + top );               
+										newwindow=window.open('http://beta.ayopasoft.com/AyopaServer/get-permissions','Register through Facebook',features);
+								}
+								else
+								{
+									jQuery('#'+formID).submit();
+								}
+							});
+		                	}
+					   }
+
+					 })
+
+					   return;
+
+					}
+
+					</script>
+
+					<a href="http://beta.ayopasoft.com/AyopaServer/facebook-registration" class="iframe" id="hiddenLink"></a>	
+				<MvELSE>
+					<script>
+						function ayopaSubmit(formID){
+							jQuery('#'+formID).submit();
+						}
+					</script>
+				</MvIF>
+
+			<input type="hidden" id="fb_id" name="fb_id" value="">
+			<input type="hidden" id="auction_id" name="auction_id" value="">
+			
+	<MvELSEIF EXPR="{l.param EQ 'product-fields'}">
+				<MvIF EXPR="{l.all_settings:CURRENT_AUCTION NE 0}">
+
+					<script>
+					jQuery(document).ready(function(){
+						jQuery('#ayopa_about').qtip({
+						   		content: jQuery('<iframe src="http://ayopa-resources.s3.amazonaws.com/plugins/hover.html" frameborder="0" width="750px" height="400px" scrolling="no"></iframe>'),
+						   		show: { when: {event: 'mouseover'} },
+						   		hide: 'unfocus',
+						   		style: { tip: true, name: 'light', width: {min:'700', max: '760'}, height: {min:'700', max:'700'}},
+								position: {
+						  				corner: {
+						     			target: 'leftMiddle',
+						     			tooltip: 'rightMiddle'}
+								}
+
+						});
+
+						jQuery('#ayopa_btn').qtip({
+						   		content: jQuery('<MvEVAL EXPR="{'<iframe src="http://beta.ayopasoft.com/AyopaServer/display-auction-button?auctionID=' $ l.all_settings:CURRENT_AUCTION $ '" frameborder="0" width="250px" height="120px" scrolling="no"></iframe>'}" /> '),
+						   		show: { when: 'mouseover' },
+						   		hide: 'unfocus',
+						   		style: { tip: true, name: 'light', width: {min:'300', max: '300'} },
+								position: {
+						  				corner: {
+						     			target: 'leftMiddle',
+						     			tooltip: 'rightMiddle'}
+								}
+
+						});
+					});
+					</script>
+
+					<script>
+					   function bwa()
+					   {
+
+						<MvFOREACH ITERATOR = "l.attribute" ARRAY = "l.all_settings:attributes" INDEX = "l.pos">
+							<MvIF EXPR="{l.attribute:code EQ 'Ayopa'}">
+								<MvEVAL EXPR="{'var index = ' $ l.attribute:index}" />
+							</MvIF>
+						</MvFOREACH>
+
+
+							<MvEVAL EXPR="{'var auction_id = "' $ l.all_settings:CURRENT_AUCTION $ '"'}" />
+					       document.getElementById('ayopa').innerHTML = '<input type="hidden" name="Product_Attributes[' + index + ']:value" value="' + auction_id + '"><input type="hidden" name="ayopa_index" value="' + name + '">';
+
+						document.forms[1].submit();
+					   }
+
+					</script>
+
+
+						<div class="purchase-buttons">
+						<div style="float:right"><img src="http://ayopa-resources.s3.amazonaws.com/images/question.png" id="ayopa_about" /></div>
+						<input type="image" id="ayopa_btn" src="https://ayopa-resources.s3.amazonaws.com/images/buy_and_save.png" value="Buy with Ayopa" onClick="bwa();" />
+						<br />
+
+					<div id="ayopa"></div>
+
+					</div>
+			</MvIF>
+		</MvIF>
+	
+</MvFUNCTION>
+
+<MvFUNCTION NAME = "ComponentModule_Render_End" PARAMETERS = "module var, item, all_settings var, settings var, param" STANDARDOUTPUTLEVEL = "">
+
+</MvFUNCTION>
+
+<MvCOMMENT>
+///////////////////////////////////////////////////////////
+Supporting Functions
+//////////////////////////////////////////////////////////
+</MvCOMMENT>
+
+<MvFUNCTION NAME = "Ayopa_GetMerchantID" PARAMETERS = "merchant_id var"  STANDARDOUTPUTLEVEL = "">
+	
+	<MvOPENVIEW NAME	= "Merchant"
+				VIEW	= "AyopaProductFields"
+				QUERY	= "{ 'SELECT * FROM ' $ g.Store_Table_Prefix $ 'AYM_Login' }">
+	<MvIF EXPR = "{ g.MvOPENVIEW_Error }">
+		<MvFUNCTIONRETURN VALUE = "{ [ g.Module_Library_Utilities ].Error( 'MER-UTL-CST-00068', g.MvOPENVIEW_Error ) }">
+	</MvIF>
+
+	<MvIF EXPR = "{ AyopaProductFields.d.EOF }">
+		<MvCLOSEVIEW NAME = "Merchant" VIEW = "AyopaProductFields">
+		<MvFUNCTIONRETURN VALUE = 0>
+	</MvIF>
+	
+	<MvCOMMENT>
+		Server call: http://www.ayopadev.com/ayopa/check_login.php? 
+		   http://ayopa1dev.happyjacksoftware.com:8080/AyopaServer/AyopaServer/miva/check-login?username=&password=
+					Send encrypted password - can Miva encrypt password to store in DB?
+	</MvCOMMENT>
+	
+	<MvASSIGN NAME="l.url" VALUE="{ 'http://beta.ayopasoft.com/AyopaServer/miva/check-login?username=' $ AyopaProductFields.d.username $ '&password=' $ AyopaProductFields.d.password }">
+	<MvASSIGN NAME="l.return" VALUE="0">
+	
+	<MIVA MvCALL_ERROR = "nonfatal, nodisplay">
+	<MvCALL ACTION="{ l.url }"  METHOD="GET" >
+		<MvIF EXPR = "{ s.callobjecttype EQ 'tag' AND tolower(s.callobjectelement) EQ 'merchant_id'}">
+		        <MvASSIGN NAME="l.posn" VALUE="{ 1 }">
+		        <MvWHILE EXPR="{ l.posn LE s.callobjectnumattributes }">
+		            <MvIF EXPR="{ tolower(s.callobjectattribute[l.posn]) EQ 'value' }">
+		                <MvASSIGN NAME="l.ndx" VALUE="{ l.ndx + 1 }">
+		                <MvASSIGN NAME="l.merchant_id" VALUE="{ s.callobjectvalue[l.posn] }"> 
+		                <MvWHILESTOP>
+		            </MvIF> 
+		            <MvASSIGN NAME="l.posn" VALUE="{ l.posn + 1 }">
+		        </MvWHILE>
+				<MvCALLCONTINUE>
+		    </MvIF>
+
+	</MvCALL>
+	<MvCLOSEVIEW NAME = "Merchant" VIEW = "AyopaProductFields">
+	<MvFUNCTIONRETURN VALUE = "{l.merchant_id}">
+</MvFUNCTION>
+
+<MvFUNCTION NAME = "Ayopa_Auction" PARAMETERS = "auction_id, product_id" STANDARDOUTPUTLEVEL = "">
+	
+	<MvASSIGN NAME="l.merchant_id" VALUE="0">
+	<MvASSIGN NAME="l.merchant_id" VALUE = "{ Ayopa_GetMerchantID(l.merchant_id) }">
+	
+	<MvIF EXPR = "{l.merchant_id NE 0}">
+	    
+	    <MvCOMMENT>
+			Server call: http://ayopa1dev.happyjacksoftware.com/miva/get-current-auction-for-product?merchantID=&productID=
+			
+			http://www.ayopadev.com/ayopa/current_auction.php?merchant_id=
+		</MvCOMMENT>
+		<MvASSIGN NAME="l.url" VALUE="{ 'http://beta.ayopasoft.com/AyopaServer/miva/get-current-auction-for-product?merchantID=' $ l.merchant_id $ '&productID=' $ l.product_id }">
+		<MvASSIGN NAME="l.return" VALUE="0">
+	
+		<MIVA MvCALL_ERROR = "nonfatal, nodisplay"> 
+		<MvCALL ACTION="{ l.url }"  METHOD="GET" >
+			<MvIF EXPR="{ s.callobjecttype EQ 'tag' }">
+				<MvCALLCONTINUE>
+				</MvIF>
+		
+				<MvASSIGN NAME="l.return" VALUE="{ s.callvalue }">
+		</MvCALL>
+	</MvIF>
+	
+	<MvCOMMENT>
+		Make Sure Newest Auction ID is stored in DB
+	</MvCOMMENT>
+	
+	<MvIF EXPR = "{l.return NE 0}">
+
+		<MvIF EXPR = "{ l.auction_id NE l.return }">
+			<MvIF EXPR = "{ NOT ProductFieldValue_Set( 1, l.product_id, l.return ) }">
+				<MvFUNCTIONRETURN VALUE = 0>
+				</MvIF>
+			</MvIF>
+	</MvIF>
+	
+	<MvFUNCTIONRETURN VALUE = "{ l.return }">
+</MvFUNCTION>
