@@ -864,10 +864,10 @@
 		</table>
 		
 				<div style="float:right;margin-right:30px;">
-					<input name="auction_submit" type="button" id="btn" name="btn" value="Save Auction">
+					<input name="auction_submit" type="button" id="btn" name="btn" value="Save GroupBuy">
 				</div>
 				<div style="float:right;margin-right:30px;">
-					<input name="auction_end" type="button" id="btn_end_auction" name="btn_end_auction" value="End Auction">
+					<input name="auction_end" type="button" id="btn_end_auction" name="btn_end_auction" value="End GroupBuy">
 				</div>
 				<div id="response">
 				</div>	
