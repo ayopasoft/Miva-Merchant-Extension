@@ -1718,7 +1718,7 @@ System Module
 	
 		<MvIF EXPR = "{ ISNULL g.fb_id }">
 			<MvASSIGN NAME = "g.Ayopa_Auctions" VALUE = "">
-			<MvASSIGN NAME = "l.return" VALUE = "{AyopaOption_Delete(g.basket:basket_id,'Ayopa')}">
+			<MvASSIGN NAME = "l.return" VALUE = "{AyopaOption_Delete(g.basket:basket_id,'GroupBuyNSave')}">
 		</MvIF>
 	
 	</MvIF>
@@ -1960,7 +1960,7 @@ Components
 			<MvASSIGN NAME = "l.option_count"		VALUE = "{ miva_array_elements( l.all_settings:basket:items[l.item_pos]:options ) }">
 			<MvWHILE EXPR = "{l.option_pos LE l.option_count}">
 				
-				<MvIF EXPR = "{ l.all_settings:basket:items[l.item_pos]:options[l.option_pos]:attr_code EQ 'Ayopa' }">
+				<MvIF EXPR = "{ l.all_settings:basket:items[l.item_pos]:options[l.option_pos]:attr_code EQ 'GroupBuyNSave' }">
 					<MvASSIGN NAME = "g.Ayopa:Ayopa" VALUE = "1">
 					
 					<MvASSIGN NAME = "{'g.Ayopa_Auctions[' $ l.count $ ']:value'}"  VALUE = "{l.all_settings:basket:items[l.item_pos]:options[l.option_pos]:data}">
@@ -2149,7 +2149,7 @@ Components
 					   {
 
 						<MvFOREACH ITERATOR = "l.attribute" ARRAY = "l.all_settings:attributes" INDEX = "l.pos">
-							<MvIF EXPR="{l.attribute:code EQ 'Ayopa'}">
+							<MvIF EXPR="{l.attribute:code EQ 'GroupBuyNSave'}">
 								<MvEVAL EXPR="{'var index = ' $ l.attribute:index}" />
 							</MvIF>
 						</MvFOREACH>
